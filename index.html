@@ -480,6 +480,8 @@
 			align-items: center;
 			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 			transition: background-color 0.3s ease, transform 0.2s ease;
+			z-index: 10;
+			/* Asegurar que esté por encima de otros elementos */
 		}
 
 		#dark-mode-toggle:hover {
@@ -498,6 +500,67 @@
 			background-color: #0056b3;
 			/* Mantener azul más oscuro en hover */
 		}
+
+		/* Estilos para las pestañas */
+		.tabs {
+			display: flex;
+			margin-bottom: 20px;
+			border-bottom: 1px solid #ddd;
+		}
+
+		body.dark-mode .tabs {
+			border-bottom-color: #4a5568;
+		}
+
+		.tab-button {
+			padding: 10px 20px;
+			cursor: pointer;
+			border: none;
+			background-color: transparent;
+			font-size: 1.1em;
+			font-weight: bold;
+			color: #555;
+			border-bottom: 2px solid transparent;
+			transition: color 0.3s ease, border-bottom-color 0.3s ease;
+		}
+
+		body.dark-mode .tab-button {
+			color: #b0b0b0;
+		}
+
+		.tab-button:hover {
+			color: #007bff;
+			border-bottom-color: #007bff;
+		}
+
+		body.dark-mode .tab-button:hover {
+			color: #007bff;
+			border-bottom-color: #007bff;
+		}
+
+
+		.tab-button.active {
+			color: #007bff;
+			border-bottom-color: #007bff;
+		}
+
+		body.dark-mode .tab-button.active {
+			color: #007bff;
+			border-bottom-color: #007bff;
+		}
+
+
+		.tab-content {
+			display: none;
+			/* Ocultar contenido de pestaña por defecto */
+			padding-top: 20px;
+		}
+
+		.tab-content.active {
+			display: block;
+			/* Mostrar contenido de la pestaña activa */
+		}
+
 
 		/* Mensaje de usabilidad para el progreso */
 		.usability-message {
@@ -650,6 +713,8 @@
 			border-radius: 8px;
 			pointer-events: none;
 			color: #333;
+			z-index: 100;
+			/* Asegurar que el tooltip esté por encima */
 		}
 	</style>
 </head>
@@ -660,41 +725,50 @@
 		<button id="dark-mode-toggle">🌙</button>
 		<h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Quiz: R, R Markdown, Quarto y Shiny</h1>
 
-		<div class="timer" id="timer-area">Tiempo restante: 60s</div>
+		<div class="tabs">
+			<button class="tab-button active" data-tab="quiz-tab">Quiz</button>
+			<button class="tab-button" data-tab="progress-tab">Progreso</button>
+		</div>
 
-		<div id="quiz-content">
-			<div id="question-area">
-				<div class="question" id="question-text"></div>
-				<div class="options" id="options-area">
+		<div id="quiz-tab" class="tab-content active">
+			<div class="timer" id="timer-area">Tiempo restante: 60s</div>
+
+			<div id="quiz-content">
+				<div id="question-area">
+					<div class="question" id="question-text"></div>
+					<div class="options" id="options-area">
+					</div>
+				</div>
+
+				<button id="submit-answer" class="button">Responder</button>
+				<button id="next-question" class="button hidden">Siguiente pregunta</button>
+
+				<div id="feedback-area" class="feedback hidden">
 				</div>
 			</div>
 
-			<button id="submit-answer" class="button">Responder</button>
-			<button id="next-question" class="button hidden">Siguiente pregunta</button>
+			<div class="score-container" id="score-area">
+			</div>
 
-			<div id="feedback-area" class="feedback hidden">
+			<div id="end-screen" class="hidden">
+				<button id="restart-quiz" class="button hidden">Reiniciar prueba</button>
 			</div>
 		</div>
 
-		<div class="score-container" id="score-area">
-		</div>
-
-		<div id="end-screen" class="hidden">
-			<button id="restart-quiz" class="button hidden">Reiniciar prueba</button>
-		</div>
-
-		<div class="session-history-container">
-			<h3 id="session-history-title">Historial de Sesión</h3>
-			<div id="session-history-list">
+		<div id="progress-tab" class="tab-content">
+			<div class="session-history-container">
+				<h3 id="session-history-title">Historial de Sesión</h3>
+				<div id="session-history-list">
+				</div>
+				<button id="clear-history-button" class="button">Borrar Historial</button>
+				<p class="usability-message">Tu progreso se guarda en tu navegador hasta que borres el historial o uses
+					otro dispositivo.</p>
 			</div>
-			<button id="clear-history-button" class="button">Borrar Historial</button>
-			<p class="usability-message">Tu progreso se guarda en tu navegador hasta que borres el historial o uses otro
-				dispositivo.</p>
-		</div>
 
-		<div class="progress-chart-container hidden">
-			<h3>Progreso de Intentos</h3>
-			<div id="progress-chart">
+			<div class="progress-chart-container hidden">
+				<h3>Progreso de Intentos</h3>
+				<div id="progress-chart">
+				</div>
 			</div>
 		</div>
 
@@ -844,6 +918,9 @@
 		let clearHistoryButton; // Botón para borrar historial
 		let progressChartContainer; // Contenedor del gráfico de progreso
 		let progressChartElement; // Elemento donde se dibuja el gráfico
+		let tooltip; // Referencia al tooltip de D3
+		let tabButtons; // Botones de pestaña
+		let tabContents; // Contenido de las pestañas
 
 
 		// Función para mezclar un array (Algoritmo Fisher-Yates (Knuth) Shuffle)
@@ -905,8 +982,16 @@
 			scoreContainerElement.classList.remove('hidden'); // Asegurarse de que el contenedor de puntaje sea visible
 			progressChartContainer.classList.add('hidden'); // Ocultar el gráfico de progreso
 
+
 			// Habilitar las opciones de respuesta al cargar una nueva pregunta
 			enableOptions();
+
+			// Deseleccionar cualquier radio button previamente seleccionado
+			const selectedRadio = optionsAreaElement.querySelector('input[name="answer"]:checked');
+			if (selectedRadio) {
+				selectedRadio.checked = false;
+			}
+
 
 			// Obtener la pregunta actual del array de preguntas aleatorizadas
 			const currentQuestion = shuffledQuizData[currentQuestionIndex];
@@ -1212,8 +1297,8 @@
 			});
 
 			// Mostrar el gráfico de progreso al finalizar el quiz
-			progressChartContainer.classList.remove('hidden');
-			drawProgressChart(); // Dibujar el gráfico con los datos actualizados
+			// progressChartContainer.classList.remove('hidden'); // Ya no se muestra aquí, se muestra en la pestaña Progreso
+			// drawProgressChart(); // Ya no se dibuja aquí
 		}
 
 		// Función para guardar el resultado de la sesión en localStorage
@@ -1362,25 +1447,34 @@
 				.attr("height", d => height - yScale(d.correct)) // La altura es solo las correctas
 				.attr("width", xScale.bandwidth());
 
-			// Opcional: Añadir tooltips para mostrar detalles al pasar el ratón
-			// Seleccionar el tooltip fuera de los event listeners para mayor robustez
-			const tooltip = d3.select("body").select(".tooltip"); // Seleccionar el tooltip existente
+			// --- Eliminar funcionalidad de Tooltip ---
+			// Se elimina la creación del elemento tooltip en window.onload y los event listeners mouseover/mouseout aquí.
+			// Si se desea una alternativa, se puede descomentar el código de etiquetas estáticas.
 
-			attempts.on("mouseover", (event, d) => {
-				// Asegurarse de que el tooltip existe antes de manipularlo
-				if (!tooltip.empty()) {
-					tooltip.classed('hidden', false) // Usar classed para alternar clases
-						.html(`Intento: ${d.attempt}<br>Correctas: ${d.correct}<br>Incorrectas: ${d.incorrect}`)
-						.style("left", (event.pageX + 10) + "px")
-						.style("top", (event.pageY - 20) + "px");
-				}
-			})
-				.on("mouseout", () => {
-					// Asegurarse de que el tooltip existe antes de manipularlo
-					if (!tooltip.empty()) {
-						tooltip.classed('hidden', true); // Usar classed para alternar clases
-					}
-				});
+			// Opcional: Añadir etiquetas de texto estático sobre las barras
+			// Esto puede saturar el gráfico si hay muchos intentos, pero es una alternativa a los tooltips.
+			// Si quieres implementarlo, descomenta y ajusta el siguiente código:
+			/*
+			attempts.append("text")
+				.attr("class", "bar-label")
+				.attr("x", xScale.bandwidth() / 2) // Centrar el texto en la barra
+				.attr("y", d => yScale(d.incorrect + d.correct) - 5) // Posicionar encima de la barra correcta
+				.attr("dy", ".35em") // Ajuste vertical
+				.text(d => d.correct) // Mostrar solo el número de correctas
+				.style("fill", "white") // Color del texto
+				.style("text-anchor", "middle") // Alinear texto al centro
+				.style("font-size", "0.7em"); // Tamaño de fuente
+
+			attempts.append("text")
+				.attr("class", "bar-label")
+				.attr("x", xScale.bandwidth() / 2) // Centrar el texto en la barra
+				.attr("y", d => yScale(d.incorrect) - 5) // Posicionar encima de la barra incorrecta
+				 .attr("dy", ".35em") // Ajuste vertical
+				.text(d => d.incorrect) // Mostrar solo el número de incorrectas
+				.style("fill", "white") // Color del texto
+				.style("text-anchor", "middle") // Alinear texto al centro
+				.style("font-size", "0.7em"); // Tamaño de fuente
+			*/
 
 			// Ajustar el tamaño del SVG para que sea responsivo (básico)
 			// No es necesario redibujar todo en redimensionamiento si se usa viewBox y preserveAspectRatio
@@ -1389,6 +1483,30 @@
 			// });
 		}
 
+
+		// Función para cambiar de pestaña
+		function changeTab(tabId) {
+			// Ocultar todo el contenido de las pestañas
+			tabContents.forEach(content => {
+				content.classList.remove('active');
+			});
+
+			// Desactivar todos los botones de pestaña
+			tabButtons.forEach(button => {
+				button.classList.remove('active');
+			});
+
+			// Mostrar el contenido de la pestaña seleccionada
+			document.getElementById(tabId).classList.add('active');
+
+			// Activar el botón de la pestaña seleccionada
+			document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+
+			// Si la pestaña de progreso está activa, dibujar el gráfico
+			if (tabId === 'progress-tab') {
+				drawProgressChart();
+			}
+		}
 
 
 		// Función para reiniciar el quiz
@@ -1416,6 +1534,9 @@
 			// Asegurarse de que el contenedor de puntaje principal sea visible
 			scoreContainerElement.classList.remove('hidden');
 			progressChartContainer.classList.add('hidden'); // Ocultar el gráfico al reiniciar
+
+			// Cambiar a la pestaña del quiz al reiniciar
+			changeTab('quiz-tab');
 		}
 
 		// Función para alternar el modo oscuro
@@ -1452,6 +1573,8 @@
 			clearHistoryButton = document.getElementById('clear-history-button'); // Referencia al botón de borrar historial
 			progressChartContainer = document.querySelector('.progress-chart-container'); // Referencia al contenedor del gráfico
 			progressChartElement = document.getElementById('progress-chart'); // Referencia al elemento donde dibujar el gráfico
+			tabButtons = document.querySelectorAll('.tab-button'); // Referencia a los botones de pestaña
+			tabContents = document.querySelectorAll('.tab-content'); // Referencia al contenido de las pestañas
 
 
 			// Crear los elementos para los botones de puntaje
@@ -1467,17 +1590,24 @@
 			scoreIncorrectButton.classList.add('score-button', 'incorrect');
 			scoreContainerElement.appendChild(scoreIncorrectButton);
 
-			// Crear el elemento tooltip de D3 una vez al cargar la página
-			d3.select("body").append("div")
-				.attr("class", "tooltip hidden");
+			// --- Eliminar creación de Tooltip aquí ---
+			// El elemento tooltip y su lógica de mouseover/mouseout se eliminan de drawProgressChart.
 
 
-			// Event listeners para los botones - ¡Ahora dentro de window.onload!
+			// Event listeners para los botones de acción
 			submitButton.addEventListener('click', checkAnswer);
 			nextButton.addEventListener('click', nextQuestion);
 			restartButton.addEventListener('click', restartQuiz); // Event listener para el botón de reiniciar
 			darkModeToggle.addEventListener('click', toggleDarkMode); // Event listener para el botón de modo oscuro
 			clearHistoryButton.addEventListener('click', clearSessionHistory); // Event listener para borrar historial
+
+			// Event listeners para los botones de pestaña
+			tabButtons.forEach(button => {
+				button.addEventListener('click', () => {
+					const tabId = button.getAttribute('data-tab');
+					changeTab(tabId);
+				});
+			});
 
 
 			// Cargar la preferencia de modo oscuro guardada (si existe)
@@ -1487,6 +1617,9 @@
 
 			// Cargar y mostrar el historial de sesiones al cargar la página
 			displaySessionHistory();
+
+			// Inicializar la interfaz mostrando la primera pestaña
+			changeTab('quiz-tab');
 
 
 			// Mezclar las preguntas al cargar la página por primera vez
