@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,36 +12,48 @@
         body {
             font-family: "Inter", sans-serif;
             background-color: #f4f7f6;
-            color: #333; /* Texto oscuro por defecto */
+            color: #333;
+            /* Texto oscuro por defecto */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
-            transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave para cambio de modo */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            /* Transición suave para cambio de modo */
         }
+
         .quiz-container {
-            background-color: #ffffff; /* Fondo blanco */
+            background-color: #ffffff;
+            /* Fondo blanco */
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             max-width: 700px;
             width: 100%;
             text-align: center;
-             position: relative; /* Necesario para posicionar el botón de modo oscuro */
-             transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Transición suave */
+            position: relative;
+            /* Necesario para posicionar el botón de modo oscuro */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            /* Transición suave */
         }
+
         .app-title {
-            font-size: 2.5em; /* Título más grande */
+            font-size: 2.5em;
+            /* Título más grande */
             font-weight: bold;
-            margin-bottom: 5px; /* Espacio antes del subtítulo */
+            margin-bottom: 5px;
+            /* Espacio antes del subtítulo */
             color: #333;
         }
+
         .app-subtitle {
             font-size: 1em;
             color: #555;
-            margin-bottom: 20px; /* Espacio después del subtítulo */
+            margin-bottom: 20px;
+            /* Espacio después del subtítulo */
         }
+
         .question {
             margin-bottom: 20px;
             font-size: 1.1em;
@@ -48,9 +61,11 @@
             color: #333;
             text-align: left;
         }
+
         .options {
             text-align: left;
         }
+
         .options label {
             display: flex;
             align-items: center;
@@ -62,11 +77,15 @@
             transition: background-color 0.3s ease, border-color 0.3s ease;
             position: relative;
             padding-left: 35px;
-             color: #333; /* Color de texto por defecto */
+            color: #333;
+            /* Color de texto por defecto */
         }
+
         .options label:hover {
-            background-color: #ffeacc; /* Naranja claro para hover */
-            border-color: #ff9800; /* Naranja para el borde en hover */
+            background-color: #ffeacc;
+            /* Naranja claro para hover */
+            border-color: #ff9800;
+            /* Naranja para el borde en hover */
         }
 
         /* Ocultar el radio button nativo */
@@ -94,7 +113,7 @@
         }
 
         /* Estilo para el cuadrado cuando el radio button está seleccionado */
-        .options input[type="radio"]:checked + label::before {
+        .options input[type="radio"]:checked+label::before {
             background-color: #007bff;
             border-color: #007bff;
         }
@@ -115,7 +134,7 @@
         }
 
         /* Mostrar el punto interior cuando el radio button está seleccionado */
-        .options input[type="radio"]:checked + label::after {
+        .options input[type="radio"]:checked+label::after {
             opacity: 1;
         }
 
@@ -126,26 +145,31 @@
             border-radius: 8px;
             text-align: left;
         }
+
         .feedback.correct {
             background-color: #d4edda;
             color: #155724;
             border-color: #c3e6cb;
         }
+
         .feedback.incorrect {
             background-color: #f8d7da;
             color: #721c24;
             border-color: #f5c6cb;
         }
+
         .feedback.warning {
             background-color: #fff3cd;
             color: #856404;
             border-color: #ffeeba;
         }
+
         .explanation {
             margin-top: 10px;
             font-size: 0.95em;
             color: #555;
         }
+
         .score-container {
             margin-top: 20px;
             text-align: center;
@@ -155,31 +179,35 @@
             flex-wrap: wrap;
         }
 
-         .score-button {
-             font-size: 1em;
-             font-weight: bold;
-             padding: 8px 15px;
-             border-radius: 8px;
-             border: none;
-             color: #ffffff;
-             display: inline-block;
-         }
+        .score-button {
+            font-size: 1em;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: none;
+            color: #ffffff;
+            display: inline-block;
+        }
 
-         .score-button.attempted {
-             background-color: #007bff; /* Azul para Intentadas */
-         }
+        .score-button.attempted {
+            background-color: #007bff;
+            /* Azul para Intentadas */
+        }
 
-         .score-button.correct {
-             background-color: #28a745; /* Verde para Correctas */
-         }
+        .score-button.correct {
+            background-color: #28a745;
+            /* Verde para Correctas */
+        }
 
-         .score-button.incorrect {
-             background-color: #ff9800; /* Naranja para Incorrectas */
-         }
+        .score-button.incorrect {
+            background-color: #ff9800;
+            /* Naranja para Incorrectas */
+        }
 
 
         .button {
-            @apply text-white font-bold py-2 px-4 rounded-lg mt-4 transition duration-0; /* Transición más rápida */
+            @apply text-white font-bold py-2 px-4 rounded-lg mt-4 transition duration-0;
+            /* Transición más rápida */
             width: auto;
             display: block;
             margin-left: auto;
@@ -191,462 +219,525 @@
             text-decoration: none;
             padding: 10px 20px;
         }
-         .button:disabled {
+
+        .button:disabled {
             @apply bg-gray-400 hover:bg-gray-400 cursor-not-allowed;
             border-color: #6b7280;
-         }
-         .button:hover:not(:disabled) {
-             background-color: #0056b3;
-             border-color: #003f80;
-         }
-
-         /* Estilo para el mensaje final del quiz */
-         .quiz-container h2 {
-             color: #007bff;
-         }
-
-
-         .timer {
-             font-size: 1.5em;
-             font-weight: bold;
-             color: #ff9800;
-             margin-bottom: 15px;
-             padding: 10px;
-             border: 2px solid #ff9800;
-             border-radius: 8px;
-             display: inline-block;
-         }
-
-         .end-message {
-             margin-top: 20px;
-             margin-bottom: 20px;
-             font-size: 1.1em;
-             color: #333;
-         }
-
-         .summary-section {
-             margin-top: 30px;
-             padding-top: 20px;
-             border-top: 1px solid #eee;
-             text-align: left;
-         }
-
-         body.dark-mode .summary-section {
-             border-top-color: #4a5568; /* Borde separador oscuro */
-         }
-
-
-         .summary-section h3 {
-             font-size: 1.2em;
-             font-weight: bold;
-             margin-bottom: 15px;
-             color: #007bff;
-             text-align: center;
-         }
-
-         body.dark-mode .summary-section h3 {
-             color: #007bff; /* Azul para título del resumen */
-         }
-
-         .summary-item {
-             margin-bottom: 20px;
-             padding: 15px;
-             background-color: #f9f9f9;
-             border-radius: 8px;
-             border: 1px solid #eee;
-         }
-
-         body.dark-mode .summary-item {
-             background-color: #2d3748;
-             border-color: #4a5568;
-         }
-
-
-         .summary-item strong {
-             color: #333;
-         }
-
-         body.dark-mode .summary-item strong {
-             color: #e2e8f0; /* Texto de pregunta claro */
-         }
-
-
-         .summary-item .correct-answer {
-             margin-top: 5px;
-             font-weight: bold;
-             color: #155724;
-         }
-
-         body.dark-mode .summary-item .correct-answer {
-             color: #48bb78; /* Verde en modo oscuro */
-         }
-
-
-         .summary-item .explanation {
-             margin-top: 5px;
-             font-size: 0.9em;
-             color: #555;
-         }
-
-         body.dark-mode .summary-item .explanation {
-             color: #cbd5e0; /* Texto de explicación claro */
-         }
-
-
-         /* Estilos para el modo oscuro */
-         body.dark-mode {
-             background-color: #1a202c; /* Fondo oscuro */
-             color: #e2e8f0; /* Texto claro */
-         }
-
-         body.dark-mode .quiz-container {
-             background-color: #2d3748; /* Fondo oscuro para el contenedor */
-             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-         }
-
-         body.dark-mode h1 { /* Ajustar color del título principal en modo oscuro */
-             color: #e2e8f0;
-         }
-
-         body.dark-mode .question {
-             color: #e2e8f0; /* Texto de pregunta claro */
-         }
-
-         body.dark-mode .options label {
-             border-color: #4a5568; /* Borde más oscuro */
-             color: #e2e8f0; /* Texto de opción claro */
-         }
-
-         body.dark-mode .options label:hover {
-             background-color: #4a5568; /* Fondo oscuro en hover */
-             border-color: #007bff; /* Borde azul en hover */
-         }
-
-         body.dark-mode .options label::before {
-             border-color: #007bff; /* Borde azul */
-             background-color: #2d3748; /* Fondo oscuro */
-         }
-
-         body.dark-mode .options input[type="radio"]:checked + label::before {
-             background-color: #007bff; /* Fondo azul seleccionado */
-             border-color: #007bff;
-         }
-
-         body.dark-mode .options label::after {
-              background-color: #e2e8f0; /* Punto interior claro */
-         }
-
-         body.dark-mode .feedback.correct {
-             background-color: #48bb78; /* Verde más oscuro */
-             color: #1a202c; /* Texto oscuro */
-             border-color: #38a169;
-         }
-
-         body.dark-mode .feedback.incorrect {
-             background-color: #f56565; /* Rojo más oscuro */
-             color: #1a202c; /* Texto oscuro */
-             border-color: #e53e3e;
-         }
-
-         body.dark-mode .feedback.warning {
-             background-color: #f6e05e; /* Amarillo más oscuro */
-             color: #2d3748; /* Texto oscuro */
-             border-color: #d69e2e;
-         }
-
-         body.dark-mode .explanation {
-             color: #cbd5e0; /* Texto de explicación claro */
-         }
-
-         body.dark-mode .quiz-container h2 {
-             color: #007bff; /* Azul para título final */
-         }
-
-         body.dark-mode .quiz-container .score-button.attempted {
-             background-color: #007bff; /* Azul para Intentadas */
-         }
-
-         body.dark-mode .quiz-container .score-button.correct {
-             background-color: #48bb78; /* Verde en modo oscuro */
-         }
-
-         body.dark-mode .quiz-container .score-button.incorrect {
-             background-color: #ff9800; /* Naranja en modo oscuro */
-         }
-
-         body.dark-mode .timer {
-             color: #ff9800; /* Naranja para el temporizador */
-             border-color: #ff9800;
-         }
-
-         body.dark-mode .end-message {
-             color: #e2e8f0; /* Texto claro */
-         }
-
-         body.dark-mode .summary-section {
-             border-top-color: #4a5568; /* Borde separador oscuro */
-         }
-
-         body.dark-mode .summary-section h3 {
-             color: #007bff; /* Azul para título del resumen */
-         }
-
-         body.dark-mode .summary-item {
-             background-color: #2d3748;
-             border-color: #4a5568;
-         }
-
-         body.dark-mode .summary-item strong {
-             color: #e2e8f0; /* Texto de pregunta claro */
-         }
-
-         body.dark-mode .summary-item .correct-answer {
-             color: #48bb78; /* Verde en modo oscuro */
-         }
-
-         body.dark-mode .summary-item .explanation {
-             color: #cbd5e0; /* Texto de explicación claro */
-         }
-
-         /* Estilo para el botón de modo oscuro */
-         #dark-mode-toggle {
-             position: absolute;
-             top: 15px;
-             right: 15px;
-             background-color: #007bff; /* Fondo azul */
-             color: white;
-             border: none;
-             border-radius: 50%; /* Botón redondo */
-             width: 35px;
-             height: 35px;
-             font-size: 1em;
-             cursor: pointer;
-             display: flex;
-             justify-content: center;
-             align-items: center;
-             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-             transition: background-color 0.3s ease, transform 0.2s ease;
-             z-index: 10; /* Asegurar que esté por encima de otros elementos */
-         }
-
-         #dark-mode-toggle:hover {
-             background-color: #0056b3; /* Azul más oscuro en hover */
-             transform: scale(1.05);
-         }
-
-         body.dark-mode #dark-mode-toggle {
-             background-color: #007bff; /* Mantener azul en modo oscuro */
-             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-         }
-
-         body.dark-mode #dark-mode-toggle:hover {
-             background-color: #0056b3; /* Mantener azul más oscuro en hover */
-         }
-
-         /* Estilos para las pestañas */
-         .tabs {
-             display: flex;
-             margin-bottom: 20px;
-             border-bottom: 1px solid #ddd;
-         }
-
-         body.dark-mode .tabs {
-             border-bottom-color: #4a5568;
-         }
-
-         .tab-button {
-             padding: 10px 20px;
-             cursor: pointer;
-             border: none;
-             background-color: transparent;
-             font-size: 1.1em;
-             font-weight: bold;
-             color: #555;
-             border-bottom: 2px solid transparent;
-             transition: color 0.3s ease, border-bottom-color 0.3s ease;
-         }
-
-         body.dark-mode .tab-button {
-             color: #b0b0b0;
-         }
-
-         .tab-button:hover {
-             color: #007bff;
-             border-bottom-color: #007bff;
-         }
-
-         body.dark-mode .tab-button:hover {
-             color: #007bff;
-             border-bottom-color: #007bff;
-         }
-
-
-         .tab-button.active {
-             color: #007bff;
-             border-bottom-color: #007bff;
-         }
-
-         body.dark-mode .tab-button.active {
-              color: #007bff;
-             border-bottom-color: #007bff;
-         }
-
-
-         .tab-content {
-             display: none; /* Ocultar contenido de pestaña por defecto */
-             padding-top: 20px;
-         }
-
-         .tab-content.active {
-             display: block; /* Mostrar contenido de la pestaña activa */
-         }
-
-
-         /* Mensaje de usabilidad para el progreso */
-         .usability-message {
-             font-size: 0.85em;
-             color: #555;
-             margin-top: 20px;
-             text-align: center;
-         }
-
-         body.dark-mode .usability-message {
-             color: #b0b0b0; /* Gris claro */
-         }
-
-         /* Contenedor para el historial de sesiones */
-         .session-history-container {
-             margin-top: 30px;
-             padding-top: 20px;
-             border-top: 1px solid #eee;
-             text-align: left;
-         }
-
-         body.dark-mode .session-history-container {
-             border-top-color: #424242;
-         }
-
-         .session-history-container h3 {
-             font-size: 1.2em;
-             font-weight: bold;
-             margin-bottom: 15px;
-             color: #007bff;
-             text-align: center;
-         }
-
-         body.dark-mode .session-history-container h3 {
-             color: #007bff; /* Azul */
-         }
-
-         .session-item {
-             margin-bottom: 15px;
-             padding: 15px;
-             background-color: #f9f9f9;
-             border-radius: 8px;
-             border: 1px solid #eee;
-         }
-
-         body.dark-mode .session-item {
-             background-color: #2d2d2d;
-             border-color: #424242;
-         }
-
-         .session-item p {
-             margin-bottom: 5px;
-             color: #333;
-         }
-
-         body.dark-mode .session-item p {
-             color: #e0e0e0; /* Texto claro */
-         }
-
-         .session-item .score-detail {
-             font-size: 0.95em;
-             color: #555;
-         }
-
-         body.dark-mode .session-item .score-detail {
-             color: #b0b0b0; /* Gris claro */
-         }
-
-         /* Estilos para el área del gráfico */
-         .progress-chart-container {
-             margin-top: 30px;
-             padding-top: 20px;
-             border-top: 1px solid #eee;
-             text-align: center;
-         }
-
-         body.dark-mode .progress-chart-container {
-             border-top-color: #424242;
-         }
-
-         .progress-chart-container h3 {
-             font-size: 1.2em;
-             font-weight: bold;
-             margin-bottom: 15px;
-             color: #007bff;
-         }
-
-         body.dark-mode .progress-chart-container h3 {
-             color: #007bff; /* Azul */
-         }
-
-         .progress-chart-container svg {
-             background-color: #f9f9f9; /* Fondo claro para el gráfico */
-             border-radius: 8px;
-             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-         }
-
-         body.dark-mode .progress-chart-container svg {
-             background-color: #2d2d2d; /* Fondo oscuro para el gráfico */
-             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-         }
-
-         .progress-chart-container .axis text {
-             font-size: 0.8em;
-             fill: #333; /* Color de texto del eje */
-         }
-
-         body.dark-mode .progress-chart-container .axis text {
-             fill: #e0e0e0; /* Color de texto del eje en modo oscuro */
-         }
-
-          .progress-chart-container .axis path,
-          .progress-chart-container .axis line {
-              stroke: #888; /* Color de las líneas del eje */
-          }
-
-          body.dark-mode .progress-chart-container .axis path,
-          body.dark-mode .progress-chart-container .axis line {
-              stroke: #b0b0b0; /* Color de las líneas del eje en modo oscuro */
-          }
-
-          .progress-chart-container .line-correct {
-              fill: none;
-              stroke: #4caf50; /* Verde para línea correcta */
-              stroke-width: 2;
-          }
-
-           .progress-chart-container .line-incorrect {
-              fill: none;
-              stroke: #ff9800; /* Naranja para línea incorrecta */
-              stroke-width: 2;
-          }
-
-           .progress-chart-container .dot {
-               fill: white; /* Fondo blanco para los puntos */
-               stroke: #333; /* Borde oscuro para los puntos */
-           }
-
-           body.dark-mode .progress-chart-container .dot {
-               fill: #1a202c; /* Fondo oscuro para los puntos */
-               stroke: #e2e8f0; /* Borde claro para los puntos */
-           }
-
-
-          /* Eliminar estilos de tooltip si no se usa */
-          /*
+        }
+
+        .button:hover:not(:disabled) {
+            background-color: #0056b3;
+            border-color: #003f80;
+        }
+
+        /* Estilo para el mensaje final del quiz */
+        .quiz-container h2 {
+            color: #007bff;
+        }
+
+
+        .timer {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ff9800;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 2px solid #ff9800;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .end-message {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .summary-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: left;
+        }
+
+        body.dark-mode .summary-section {
+            border-top-color: #4a5568;
+            /* Borde separador oscuro */
+        }
+
+
+        .summary-section h3 {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #007bff;
+            text-align: center;
+        }
+
+        body.dark-mode .summary-section h3 {
+            color: #007bff;
+            /* Azul para título del resumen */
+        }
+
+        .summary-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        body.dark-mode .summary-item {
+            background-color: #2d3748;
+            border-color: #4a5568;
+        }
+
+
+        .summary-item strong {
+            color: #333;
+        }
+
+        body.dark-mode .summary-item strong {
+            color: #e2e8f0;
+            /* Texto de pregunta claro */
+        }
+
+
+        .summary-item .correct-answer {
+            margin-top: 5px;
+            font-weight: bold;
+            color: #155724;
+        }
+
+        body.dark-mode .summary-item .correct-answer {
+            color: #48bb78;
+            /* Verde en modo oscuro */
+        }
+
+
+        .summary-item .explanation {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        body.dark-mode .summary-item .explanation {
+            color: #cbd5e0;
+            /* Texto de explicación claro */
+        }
+
+
+        /* Estilos para el modo oscuro */
+        body.dark-mode {
+            background-color: #1a202c;
+            /* Fondo oscuro */
+            color: #e2e8f0;
+            /* Texto claro */
+        }
+
+        body.dark-mode .quiz-container {
+            background-color: #2d3748;
+            /* Fondo oscuro para el contenedor */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        body.dark-mode h1 {
+            /* Ajustar color del título principal en modo oscuro */
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .question {
+            color: #e2e8f0;
+            /* Texto de pregunta claro */
+        }
+
+        body.dark-mode .options label {
+            border-color: #4a5568;
+            /* Borde más oscuro */
+            color: #e2e8f0;
+            /* Texto de opción claro */
+        }
+
+        body.dark-mode .options label:hover {
+            background-color: #4a5568;
+            /* Fondo oscuro en hover */
+            border-color: #007bff;
+            /* Borde azul en hover */
+        }
+
+        body.dark-mode .options label::before {
+            border-color: #007bff;
+            /* Borde azul */
+            background-color: #2d3748;
+            /* Fondo oscuro */
+        }
+
+        body.dark-mode .options input[type="radio"]:checked+label::before {
+            background-color: #007bff;
+            /* Fondo azul seleccionado */
+            border-color: #007bff;
+        }
+
+        body.dark-mode .options label::after {
+            background-color: #e2e8f0;
+            /* Punto interior claro */
+        }
+
+        body.dark-mode .feedback.correct {
+            background-color: #48bb78;
+            /* Verde más oscuro */
+            color: #1a202c;
+            /* Texto oscuro */
+            border-color: #38a169;
+        }
+
+        body.dark-mode .feedback.incorrect {
+            background-color: #f56565;
+            /* Rojo más oscuro */
+            color: #1a202c;
+            /* Texto oscuro */
+            border-color: #e53e3e;
+        }
+
+        body.dark-mode .feedback.warning {
+            background-color: #f6e05e;
+            /* Amarillo más oscuro */
+            color: #2d3748;
+            /* Texto oscuro */
+            border-color: #d69e2e;
+        }
+
+        body.dark-mode .explanation {
+            color: #cbd5e0;
+            /* Texto de explicación claro */
+        }
+
+        body.dark-mode .quiz-container h2 {
+            color: #007bff;
+            /* Azul para título final */
+        }
+
+        body.dark-mode .quiz-container .score-button.attempted {
+            background-color: #007bff;
+            /* Azul para Intentadas */
+        }
+
+        body.dark-mode .quiz-container .score-button.correct {
+            background-color: #48bb78;
+            /* Verde en modo oscuro */
+        }
+
+        body.dark-mode .quiz-container .score-button.incorrect {
+            background-color: #ff9800;
+            /* Naranja en modo oscuro */
+        }
+
+        body.dark-mode .timer {
+            color: #ff9800;
+            /* Naranja para el temporizador */
+            border-color: #ff9800;
+        }
+
+        body.dark-mode .end-message {
+            color: #e2e8f0;
+            /* Texto claro */
+        }
+
+        body.dark-mode .summary-section {
+            border-top-color: #4a5568;
+            /* Borde separador oscuro */
+        }
+
+        body.dark-mode .summary-section h3 {
+            color: #007bff;
+            /* Azul para título del resumen */
+        }
+
+        body.dark-mode .summary-item {
+            background-color: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .summary-item strong {
+            color: #e2e8f0;
+            /* Texto de pregunta claro */
+        }
+
+        body.dark-mode .summary-item .correct-answer {
+            color: #48bb78;
+            /* Verde en modo oscuro */
+        }
+
+        body.dark-mode .summary-item .explanation {
+            color: #cbd5e0;
+            /* Texto de explicación claro */
+        }
+
+        /* Estilo para el botón de modo oscuro */
+        #dark-mode-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #007bff;
+            /* Fondo azul */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            /* Botón redondo */
+            width: 35px;
+            height: 35px;
+            font-size: 1em;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            z-index: 10;
+            /* Asegurar que esté por encima de otros elementos */
+        }
+
+        #dark-mode-toggle:hover {
+            background-color: #0056b3;
+            /* Azul más oscuro en hover */
+            transform: scale(1.05);
+        }
+
+        body.dark-mode #dark-mode-toggle {
+            background-color: #007bff;
+            /* Mantener azul en modo oscuro */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode #dark-mode-toggle:hover {
+            background-color: #0056b3;
+            /* Mantener azul más oscuro en hover */
+        }
+
+        /* Estilos para las pestañas */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        body.dark-mode .tabs {
+            border-bottom-color: #4a5568;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #555;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        body.dark-mode .tab-button {
+            color: #b0b0b0;
+        }
+
+        .tab-button:hover {
+            color: #007bff;
+            border-bottom-color: #007bff;
+        }
+
+        body.dark-mode .tab-button:hover {
+            color: #007bff;
+            border-bottom-color: #007bff;
+        }
+
+
+        .tab-button.active {
+            color: #007bff;
+            border-bottom-color: #007bff;
+        }
+
+        body.dark-mode .tab-button.active {
+            color: #007bff;
+            border-bottom-color: #007bff;
+        }
+
+
+        .tab-content {
+            display: none;
+            /* Ocultar contenido de pestaña por defecto */
+            padding-top: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+            /* Mostrar contenido de la pestaña activa */
+        }
+
+
+        /* Mensaje de usabilidad para el progreso */
+        .usability-message {
+            font-size: 0.85em;
+            color: #555;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        body.dark-mode .usability-message {
+            color: #b0b0b0;
+            /* Gris claro */
+        }
+
+        /* Contenedor para el historial de sesiones */
+        .session-history-container {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: left;
+        }
+
+        body.dark-mode .session-history-container {
+            border-top-color: #424242;
+        }
+
+        .session-history-container h3 {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #007bff;
+            text-align: center;
+        }
+
+        body.dark-mode .session-history-container h3 {
+            color: #007bff;
+            /* Azul */
+        }
+
+        .session-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        body.dark-mode .session-item {
+            background-color: #2d2d2d;
+            border-color: #424242;
+        }
+
+        .session-item p {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        body.dark-mode .session-item p {
+            color: #e0e0e0;
+            /* Texto claro */
+        }
+
+        .session-item .score-detail {
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        body.dark-mode .session-item .score-detail {
+            color: #b0b0b0;
+            /* Gris claro */
+        }
+
+        /* Estilos para el área del gráfico */
+        .progress-chart-container {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        body.dark-mode .progress-chart-container {
+            border-top-color: #424242;
+        }
+
+        .progress-chart-container h3 {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #007bff;
+        }
+
+        body.dark-mode .progress-chart-container h3 {
+            color: #007bff;
+            /* Azul */
+        }
+
+        .progress-chart-container svg {
+            background-color: #f9f9f9;
+            /* Fondo claro para el gráfico */
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode .progress-chart-container svg {
+            background-color: #2d2d2d;
+            /* Fondo oscuro para el gráfico */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-chart-container .axis text {
+            font-size: 0.8em;
+            fill: #333;
+            /* Color de texto del eje */
+        }
+
+        body.dark-mode .progress-chart-container .axis text {
+            fill: #e0e0e0;
+            /* Color de texto del eje en modo oscuro */
+        }
+
+        .progress-chart-container .axis path,
+        .progress-chart-container .axis line {
+            stroke: #888;
+            /* Color de las líneas del eje */
+        }
+
+        body.dark-mode .progress-chart-container .axis path,
+        body.dark-mode .progress-chart-container .axis line {
+            stroke: #b0b0b0;
+            /* Color de las líneas del eje en modo oscuro */
+        }
+
+        .progress-chart-container .line-correct {
+            fill: none;
+            stroke: #4caf50;
+            /* Verde para línea correcta */
+            stroke-width: 2;
+        }
+
+        .progress-chart-container .line-incorrect {
+            fill: none;
+            stroke: #ff9800;
+            /* Naranja para línea incorrecta */
+            stroke-width: 2;
+        }
+
+        .progress-chart-container .dot {
+            fill: white;
+            /* Fondo blanco para los puntos */
+            stroke: #333;
+            /* Borde oscuro para los puntos */
+        }
+
+        body.dark-mode .progress-chart-container .dot {
+            fill: #1a202c;
+            /* Fondo oscuro para los puntos */
+            stroke: #e2e8f0;
+            /* Borde claro para los puntos */
+        }
+
+
+        /* Eliminar estilos de tooltip si no se usa */
+        /*
           .progress-chart-container .tooltip {
               position: absolute;
               text-align: center;
@@ -661,83 +752,85 @@
           }
           */
 
-          /* Estilos para la sección de configuración */
-          .config-section {
-             margin-top: 20px;
-             text-align: left;
-             padding: 20px;
-             border: 1px solid #eee;
-             border-radius: 8px;
-             background-color: #f9f9f9;
-          }
+        /* Estilos para la sección de configuración */
+        .config-section {
+            margin-top: 20px;
+            text-align: left;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
 
-           body.dark-mode .config-section {
-               border-color: #4a5568;
-               background-color: #2d3748;
-           }
+        body.dark-mode .config-section {
+            border-color: #4a5568;
+            background-color: #2d3748;
+        }
 
-          .config-section h3 {
-              font-size: 1.2em;
-              font-weight: bold;
-              margin-bottom: 15px;
-              color: #007bff;
-              text-align: center;
-          }
+        .config-section h3 {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #007bff;
+            text-align: center;
+        }
 
-           body.dark-mode .config-section h3 {
-               color: #007bff;
-           }
+        body.dark-mode .config-section h3 {
+            color: #007bff;
+        }
 
-          .config-item {
-              margin-bottom: 15px;
-          }
+        .config-item {
+            margin-bottom: 15px;
+        }
 
-          .config-item label {
-              display: block;
-              font-weight: bold;
-              margin-bottom: 5px;
-              color: #333;
-          }
+        .config-item label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
 
-           body.dark-mode .config-item label {
-               color: #e2e8f0;
-           }
+        body.dark-mode .config-item label {
+            color: #e2e8f0;
+        }
 
-          .config-item input[type="number"] {
-              width: 80px;
-              padding: 8px;
-              border: 1px solid #ccc;
-              border-radius: 4px;
-              background-color: #fff;
-              color: #333;
-          }
+        .config-item input[type="number"] {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #333;
+        }
 
-           body.dark-mode .config-item input[type="number"] {
-               border-color: #4a5568;
-               background-color: #1a202c;
-               color: #e2e8f0;
-           }
+        body.dark-mode .config-item input[type="number"] {
+            border-color: #4a5568;
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
 
-          .start-button {
-               /* Reutilizar estilos del botón general pero con posibles ajustes */
-               @apply bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg mt-4 transition duration-0;
-               background-color: #28a745; /* Verde */
-               border-color: #218838; /* Verde más oscuro */
-          }
+        .start-button {
+            /* Reutilizar estilos del botón general pero con posibles ajustes */
+            @apply bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg mt-4 transition duration-0;
+            background-color: #28a745;
+            /* Verde */
+            border-color: #218838;
+            /* Verde más oscuro */
+        }
 
-           body.dark-mode .start-button {
-               background-color: #48bb78; /* Verde en modo oscuro */
-               border-color: #38a169;
-           }
+        body.dark-mode .start-button {
+            background-color: #48bb78;
+            /* Verde en modo oscuro */
+            border-color: #38a169;
+        }
 
-           body.dark-mode .start-button:hover {
-               background-color: #38a169;
-               border-color: #2b7d4b;
-           }
-
-
+        body.dark-mode .start-button:hover {
+            background-color: #38a169;
+            border-color: #2b7d4b;
+        }
     </style>
 </head>
+
 <body>
 
     <div class="quiz-container">
@@ -756,10 +849,12 @@
                 <h3>Configurar Entrenamiento</h3>
                 <div class="config-item">
                     <label for="num-questions">Número de Preguntas:</label>
-                    <input type="number" id="num-questions" value="10" min="1" max="10"> </div>
-                 <div class="config-item">
+                    <input type="number" id="num-questions" value="10" min="1" max="10">
+                </div>
+                <div class="config-item">
                     <label for="quiz-time">Tiempo (segundos):</label>
-                    <input type="number" id="quiz-time" value="60" min="10" max="300"> </div>
+                    <input type="number" id="quiz-time" value="60" min="10" max="300">
+                </div>
                 <button id="start-quiz-button" class="button start-button">Iniciar Entrenamiento</button>
             </div>
         </div>
@@ -772,39 +867,41 @@
                 <div id="question-area">
                     <div class="question" id="question-text"></div>
                     <div class="options" id="options-area">
-                        </div>
+                    </div>
                 </div>
 
                 <button id="submit-answer" class="button">Responder</button>
                 <button id="next-question" class="button hidden">Siguiente pregunta</button>
 
                 <div id="feedback-area" class="feedback hidden">
-                    </div>
+                </div>
             </div>
 
             <div class="score-container" id="score-area">
-                 </div>
+            </div>
 
-             <div id="end-screen" class="hidden">
-                 <button id="restart-quiz" class="button hidden">Reiniciar prueba</button>
-             </div>
+            <div id="end-screen" class="hidden">
+                <button id="restart-quiz" class="button hidden">Reiniciar prueba</button>
+            </div>
         </div>
 
         <div id="progress-tab" class="tab-content">
-             <div class="session-history-container">
-                 <h3 id="session-history-title">Historial de Sesión</h3>
-                 <div id="session-history-list">
-                     </div>
-                 <button id="clear-history-button" class="button">Borrar Historial</button>
-                 <p class="usability-message">Tu progreso se guarda en tu navegador hasta que borres el historial o uses otro dispositivo.</p>
-             </div>
+            <div class="session-history-container">
+                <h3 id="session-history-title">Historial de Sesión</h3>
+                <div id="session-history-list">
+                </div>
+                <button id="clear-history-button" class="button">Borrar Historial</button>
+                <p class="usability-message">Tu progreso se guarda en tu navegador hasta que borres el historial o uses
+                    otro dispositivo.</p>
+            </div>
 
-             <div class="progress-chart-container hidden">
-                 <h3>Progreso de Intentos</h3>
-                 <div id="progress-chart">
-                     </div>
-             </div>
-             <button id="download-csv-button" class="button mt-4">Descargar Historial (CSV)</button> </div>
+            <div class="progress-chart-container hidden">
+                <h3>Progreso de Intentos</h3>
+                <div id="progress-chart">
+                </div>
+            </div>
+            <button id="download-csv-button" class="button mt-4">Descargar Historial (CSV)</button>
+        </div>
 
 
     </div>
@@ -970,16 +1067,16 @@
             return array;
         }
 
-         // Función para mezclar las opciones de un objeto de opciones
-         function shuffleOptions(optionsObject) {
-             const optionKeys = Object.keys(optionsObject);
-             shuffleArray(optionKeys); // Mezclar las claves (A, B, C, D)
-             const shuffledOptions = {};
-             optionKeys.forEach(key => {
-                 shuffledOptions[key] = optionsObject[key]; // Reconstruir el objeto con el orden mezclado
-             });
-             return shuffledOptions;
-         }
+        // Función para mezclar las opciones de un objeto de opciones
+        function shuffleOptions(optionsObject) {
+            const optionKeys = Object.keys(optionsObject);
+            shuffleArray(optionKeys); // Mezclar las claves (A, B, C, D)
+            const shuffledOptions = {};
+            optionKeys.forEach(key => {
+                shuffledOptions[key] = optionsObject[key]; // Reconstruir el objeto con el orden mezclado
+            });
+            return shuffledOptions;
+        }
 
 
         // Función para iniciar el temporizador global del quiz
@@ -1010,7 +1107,7 @@
 
         // Función para cargar y mostrar la pregunta actual
         function loadQuestion() {
-             if (!quizActive) return; // No cargar pregunta si el quiz no está activo
+            if (!quizActive) return; // No cargar pregunta si el quiz no está activo
 
             // Limpiar área de opciones y feedback
             optionsAreaElement.innerHTML = '';
@@ -1039,8 +1136,8 @@
             // Obtener la pregunta actual del array de preguntas aleatorizadas
             // Asegurarse de no exceder el número de preguntas configurado
             if (currentQuestionIndex >= numberOfQuestions || currentQuestionIndex >= shuffledQuizData.length) {
-                 endQuiz(false); // Finalizar si ya se mostraron todas las preguntas configuradas o disponibles
-                 return;
+                endQuiz(false); // Finalizar si ya se mostraron todas las preguntas configuradas o disponibles
+                return;
             }
 
             const currentQuestion = shuffledQuizData[currentQuestionIndex];
@@ -1089,10 +1186,10 @@
             updateScoreDisplay();
 
             // Deshabilitar opciones si el tiempo se agotó (aunque endQuiz debería manejar esto)
-             if (timeLeft <= 0) {
-                 disableOptions();
-                 submitButton.disabled = true;
-             }
+            if (timeLeft <= 0) {
+                disableOptions();
+                submitButton.disabled = true;
+            }
         }
 
         // Función para deshabilitar las opciones de respuesta
@@ -1104,17 +1201,17 @@
         }
 
         // Función para habilitar las opciones de respuesta
-         function enableOptions() {
+        function enableOptions() {
             const options = optionsAreaElement.querySelectorAll('input[name="answer"]');
             options.forEach(option => {
                 option.disabled = false;
             });
-         }
+        }
 
 
         // Función para verificar la respuesta seleccionada
         function checkAnswer() {
-             if (!quizActive) return; // No procesar respuesta si el quiz no está activo
+            if (!quizActive) return; // No procesar respuesta si el quiz no está activo
 
             // Obtener la opción seleccionada por el usuario
             const selectedOption = document.querySelector('input[name="answer"]:checked');
@@ -1167,8 +1264,8 @@
             if (timeLeft > 0) {
                 nextButton.classList.remove('hidden');
             } else {
-                 // Si el tiempo se agotó, ir directamente a la pantalla final
-                 endQuiz(true);
+                // Si el tiempo se agotó, ir directamente a la pantalla final
+                endQuiz(true);
             }
 
 
@@ -1178,7 +1275,7 @@
 
         // Función para pasar a la siguiente pregunta o finalizar el quiz
         function nextQuestion() {
-             if (!quizActive) return; // No pasar de pregunta si el quiz no está activo
+            if (!quizActive) return; // No pasar de pregunta si el quiz no está activo
 
             currentQuestionIndex++; // Incrementar el índice de la pregunta
 
@@ -1199,8 +1296,8 @@
             // por lo que el número de intentadas es el índice actual + 1.
             const attempted = currentQuestionIndex + (nextButton.classList.contains('hidden') ? 0 : 1);
 
-             const correct = score;
-             const incorrect = attempted - correct;
+            const correct = score;
+            const incorrect = attempted - correct;
 
             // Actualizar el texto de los botones de puntaje
             scoreAttemptedButton.textContent = `Intentadas: ${attempted}`;
@@ -1210,8 +1307,8 @@
 
         // Función para finalizar el quiz
         function endQuiz(timeRanOut) {
-             if (!quizActive) return; // Evitar finalizar múltiples veces
-             quizActive = false; // Marcar el quiz como inactivo
+            if (!quizActive) return; // Evitar finalizar múltiples veces
+            quizActive = false; // Marcar el quiz como inactivo
 
             // Detener el temporizador final
             stopTimer();
@@ -1228,16 +1325,16 @@
             // Mostrar mensaje de fin de quiz
             const endTitle = document.createElement('h2');
             endTitle.classList.add('text-xl', 'font-bold', 'text-center', 'text-gray-800', 'mb-4');
-             if (timeRanOut) {
-                 endTitle.textContent = '¡Tiempo agotado!';
-             } else {
-                 endTitle.textContent = '¡Entrenamiento Finalizado!'; // Cambiar texto
-             }
+            if (timeRanOut) {
+                endTitle.textContent = '¡Tiempo agotado!';
+            } else {
+                endTitle.textContent = '¡Entrenamiento Finalizado!'; // Cambiar texto
+            }
 
-             // Calcular el puntaje final detallado
-             const totalAttempted = currentQuestionIndex; // Total de preguntas que se intentaron
-             const finalCorrect = score;
-             const finalIncorrect = totalAttempted - finalCorrect;
+            // Calcular el puntaje final detallado
+            const totalAttempted = currentQuestionIndex; // Total de preguntas que se intentaron
+            const finalCorrect = score;
+            const finalIncorrect = totalAttempted - finalCorrect;
 
 
             // Determinar el mensaje basado en el puntaje
@@ -1255,25 +1352,25 @@
             scoreMessageElement.textContent = scoreMessageText;
 
             // Crear un nuevo contenedor para los botones de puntaje finales
-             const finalScoreContainer = document.createElement('div');
-             finalScoreContainer.classList.add('score-container'); // Reutilizar la clase de estilo
+            const finalScoreContainer = document.createElement('div');
+            finalScoreContainer.classList.add('score-container'); // Reutilizar la clase de estilo
 
 
-             // Crear y añadir los botones de puntaje finales
-             const finalAttemptedButton = document.createElement('span');
-             finalAttemptedButton.classList.add('score-button', 'attempted');
-             finalAttemptedButton.textContent = `Intentadas: ${totalAttempted}`;
-             finalScoreContainer.appendChild(finalAttemptedButton);
+            // Crear y añadir los botones de puntaje finales
+            const finalAttemptedButton = document.createElement('span');
+            finalAttemptedButton.classList.add('score-button', 'attempted');
+            finalAttemptedButton.textContent = `Intentadas: ${totalAttempted}`;
+            finalScoreContainer.appendChild(finalAttemptedButton);
 
-             const finalCorrectButton = document.createElement('span');
-             finalCorrectButton.classList.add('score-button', 'correct');
-             finalCorrectButton.textContent = `Correctas: ${finalCorrect}`;
-             finalScoreContainer.appendChild(finalCorrectButton);
+            const finalCorrectButton = document.createElement('span');
+            finalCorrectButton.classList.add('score-button', 'correct');
+            finalCorrectButton.textContent = `Correctas: ${finalCorrect}`;
+            finalScoreContainer.appendChild(finalCorrectButton);
 
-             const finalIncorrectButton = document.createElement('span');
-             finalIncorrectButton.classList.add('score-button', 'incorrect');
-             finalIncorrectButton.textContent = `Incorrectas: ${finalIncorrect}`;
-             finalScoreContainer.appendChild(finalIncorrectButton);
+            const finalIncorrectButton = document.createElement('span');
+            finalIncorrectButton.classList.add('score-button', 'incorrect');
+            finalIncorrectButton.textContent = `Incorrectas: ${finalIncorrect}`;
+            finalScoreContainer.appendChild(finalIncorrectButton);
 
 
             // Limpiar el contenido anterior de la pantalla final y añadir los nuevos elementos
@@ -1293,7 +1390,7 @@
             // Iterar solo sobre las preguntas que fueron presentadas en este quiz
             // currentQuestionIndex es el número de preguntas que se intentaron/vieron
             for (let i = 0; i < currentQuestionIndex; i++) {
-                 const questionData = shuffledQuizData[i]; // Obtener la pregunta del array mezclado
+                const questionData = shuffledQuizData[i]; // Obtener la pregunta del array mezclado
 
                 const summaryItem = document.createElement('div');
                 summaryItem.classList.add('summary-item');
@@ -1303,8 +1400,8 @@
                 summaryItem.appendChild(questionText);
 
                 const correctAnswer = document.createElement('p');
-                 // Encontrar el texto de la respuesta correcta usando la clave
-                 const correctAnswerText = questionData.options[questionData.correctAnswer];
+                // Encontrar el texto de la respuesta correcta usando la clave
+                const correctAnswerText = questionData.options[questionData.correctAnswer];
                 correctAnswer.innerHTML = `<span class="correct-answer">Respuesta Correcta: ${questionData.correctAnswer}) ${correctAnswerText}</span>`;
                 summaryItem.appendChild(correctAnswer);
 
@@ -1336,272 +1433,272 @@
                 timestamp: new Date().toISOString() // Opcional: guardar la hora del intento
             });
 
-             // Enviar datos al backend (solo esqueleto)
-             sendResultToBackend({
+            // Enviar datos al backend (solo esqueleto)
+            sendResultToBackend({
                 attempted: totalAttempted,
                 correct: finalCorrect,
                 incorrect: finalIncorrect,
                 timestamp: new Date().toISOString(),
                 quizId: 'r_markdown_shiny_quiz' // Identificador del quiz
-             });
+            });
 
-             // Mostrar el gráfico de progreso al finalizar el quiz
-             // progressChartContainer.classList.remove('hidden'); // Ya no se muestra aquí, se muestra en la pestaña Progreso
-             // drawProgressChart(); // Ya no se dibuja aquí
+            // Mostrar el gráfico de progreso al finalizar el quiz
+            // progressChartContainer.classList.remove('hidden'); // Ya no se muestra aquí, se muestra en la pestaña Progreso
+            // drawProgressChart(); // Ya no se dibuja aquí
         }
 
-         // Función para guardar el resultado de la sesión en localStorage
-         function saveSessionResult(result) {
-             const results = JSON.parse(localStorage.getItem('quizResults') || '[]');
-             results.push(result);
-             localStorage.setItem('quizResults', JSON.stringify(results));
-             displaySessionHistory(); // Actualizar la visualización del historial
-         }
+        // Función para guardar el resultado de la sesión en localStorage
+        function saveSessionResult(result) {
+            const results = JSON.parse(localStorage.getItem('quizResults') || '[]');
+            results.push(result);
+            localStorage.setItem('quizResults', JSON.stringify(results));
+            displaySessionHistory(); // Actualizar la visualización del historial
+        }
 
-         // Función para cargar y mostrar el historial de sesiones
-         function displaySessionHistory() {
-             const results = JSON.parse(localStorage.getItem('quizResults') || '[]');
-             sessionHistoryList.innerHTML = ''; // Limpiar la lista actual
+        // Función para cargar y mostrar el historial de sesiones
+        function displaySessionHistory() {
+            const results = JSON.parse(localStorage.getItem('quizResults') || '[]');
+            sessionHistoryList.innerHTML = ''; // Limpiar la lista actual
 
-             if (results.length === 0) {
-                 sessionHistoryList.innerHTML = '<p class="text-center text-gray-500">Aún no hay intentos en esta sesión.</p>';
-                 // Ocultar el gráfico si no hay historial
-                 progressChartContainer.classList.add('hidden');
-                 return;
-             }
+            if (results.length === 0) {
+                sessionHistoryList.innerHTML = '<p class="text-center text-gray-500">Aún no hay intentos en esta sesión.</p>';
+                // Ocultar el gráfico si no hay historial
+                progressChartContainer.classList.add('hidden');
+                return;
+            }
 
-             results.forEach((result, index) => {
-                 const sessionItem = document.createElement('div');
-                 sessionItem.classList.add('session-item');
-                 sessionItem.innerHTML = `
+            results.forEach((result, index) => {
+                const sessionItem = document.createElement('div');
+                sessionItem.classList.add('session-item');
+                sessionItem.innerHTML = `
                      <p><strong>Intento ${index + 1}:</strong></p>
                      <p class="score-detail">Intentadas: ${result.attempted}, Correctas: ${result.correct}, Incorrectas: ${result.incorrect}</p>
                      ${result.timestamp ? `<p class="score-detail">Hora: ${new Date(result.timestamp).toLocaleString()}</p>` : ''}
                  `;
-                 sessionHistoryList.appendChild(sessionItem);
-             });
+                sessionHistoryList.appendChild(sessionItem);
+            });
 
-             // Mostrar el gráfico si hay historial
-             progressChartContainer.classList.remove('hidden');
-             drawProgressChart(); // Dibujar el gráfico con los datos del historial
-         }
+            // Mostrar el gráfico si hay historial
+            progressChartContainer.classList.remove('hidden');
+            drawProgressChart(); // Dibujar el gráfico con los datos del historial
+        }
 
-         // Función para borrar el historial de sesiones
-         function clearSessionHistory() {
-             localStorage.removeItem('quizResults');
-             displaySessionHistory(); // Actualizar la visualización (mostrará el mensaje de "Aún no hay intentos")
-         }
+        // Función para borrar el historial de sesiones
+        function clearSessionHistory() {
+            localStorage.removeItem('quizResults');
+            displaySessionHistory(); // Actualizar la visualización (mostrará el mensaje de "Aún no hay intentos")
+        }
 
-         // Función para descargar el historial como archivo CSV
-         function downloadCSV() {
-             const results = JSON.parse(localStorage.getItem('quizResults') || '[]');
+        // Función para descargar el historial como archivo CSV
+        function downloadCSV() {
+            const results = JSON.parse(localStorage.getItem('quizResults') || '[]');
 
-             if (results.length === 0) {
-                 alert("No hay historial para descargar.");
-                 return;
-             }
+            if (results.length === 0) {
+                alert("No hay historial para descargar.");
+                return;
+            }
 
-             // Crear el encabezado del CSV
-             const headers = ["Intento", "Intentadas", "Correctas", "Incorrectas", "Hora"];
-             let csvContent = headers.join(",") + "\n";
+            // Crear el encabezado del CSV
+            const headers = ["Intento", "Intentadas", "Correctas", "Incorrectas", "Hora"];
+            let csvContent = headers.join(",") + "\n";
 
-             // Añadir los datos de cada intento
-             results.forEach((result, index) => {
-                 const row = [
-                     index + 1,
-                     result.attempted,
-                     result.correct,
-                     result.incorrect,
-                     result.timestamp ? new Date(result.timestamp).toLocaleString() : '' // Formatear la hora
-                 ];
-                 csvContent += row.join(",") + "\n";
-             });
+            // Añadir los datos de cada intento
+            results.forEach((result, index) => {
+                const row = [
+                    index + 1,
+                    result.attempted,
+                    result.correct,
+                    result.incorrect,
+                    result.timestamp ? new Date(result.timestamp).toLocaleString() : '' // Formatear la hora
+                ];
+                csvContent += row.join(",") + "\n";
+            });
 
-             // Crear un Blob con el contenido CSV
-             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            // Crear un Blob con el contenido CSV
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
 
-             // Crear un enlace de descarga
-             const link = document.createElement('a');
-             if (link.download !== undefined) { // Verificar si el atributo download es soportado
-                 const url = URL.createObjectURL(blob);
-                 link.setAttribute('href', url);
-                 link.setAttribute('download', 'historial_quiz_r.csv');
-                 link.style.visibility = 'hidden';
-                 document.body.appendChild(link);
-                 link.click();
-                 document.body.removeChild(link);
-             } else {
-                 // Fallback para navegadores que no soportan el atributo download
-                 alert("Tu navegador no soporta la descarga automática. Copia el siguiente texto:\n\n" + csvContent);
-             }
-         }
-
-
-         // Función placeholder para enviar datos al backend
-         function sendResultToBackend(resultData) {
-             // ** ESTO ES SOLO UN ESQUELETO **
-             // Para que esto funcione, necesitas un servidor backend configurado
-             // para recibir peticiones POST en la URL especificada.
-             const backendUrl = 'TU_URL_DEL_BACKEND_PARA_GUARDAR_RESULTADOS'; // <<< Reemplaza con tu URL real
-
-             console.log('Intentando enviar datos al backend:', resultData); // Log para depuración
-
-             // Descomenta el siguiente bloque para intentar enviar datos (requiere backend)
-             /*
-             fetch(backendUrl, {
-                 method: 'POST',
-                 headers: {
-                     'Content-Type': 'application/json',
-                 },
-                 body: JSON.stringify(resultData),
-             })
-             .then(response => {
-                 if (!response.ok) {
-                     console.error('Error al enviar datos al backend:', response.statusText);
-                 }
-                 return response.json();
-             })
-             .then(data => {
-                 console.log('Respuesta del backend:', data);
-             })
-             .catch((error) => {
-                 console.error('Error en la conexión con el backend:', error);
-             });
-             */
-         }
-
-         // Función para dibujar el gráfico de progreso usando D3.js (Línea y Punto)
-         function drawProgressChart() {
-             const results = JSON.parse(localStorage.getItem('quizResults') || '[]');
-             progressChartElement.innerHTML = ''; // Limpiar el área del gráfico anterior
-
-             if (results.length === 0) {
-                 // No dibujar gráfico si no hay datos
-                 return;
-             }
-
-             const data = results.map((r, i) => ({
-                 attempt: i + 1,
-                 correct: r.correct,
-                 incorrect: r.incorrect
-             }));
-
-             const margin = {top: 20, right: 20, bottom: 30, left: 40};
-             const width = 600 - margin.left - margin.right;
-             const height = 300 - margin.top - margin.bottom;
-
-             // Seleccionar el contenedor y añadir el SVG
-             const svg = d3.select("#progress-chart").append("svg")
-                 .attr("width", "100%") // Usar ancho relativo
-                 .attr("height", height + margin.top + margin.bottom)
-                 .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`) // Añadir viewBox para responsividad
-                 .attr("preserveAspectRatio", "xMidYMid meet") // Mantener aspecto
-               .append("g")
-                 .attr("transform", `translate(${margin.left},${margin.top})`);
-
-             // Escalas
-             const xScale = d3.scaleLinear() // Escala lineal para el eje X (intentos)
-                 .range([0, width])
-                 .domain([1, d3.max(data, d => d.attempt)]); // El eje X va desde 1 hasta el número máximo de intentos
-
-             const yScale = d3.scaleLinear()
-                 .range([height, 0])
-                 .domain([0, d3.max(data, d => d.correct + d.incorrect)]); // El eje Y va desde 0 hasta el total de intentadas
-
-             // Eje X (con formato para mostrar números enteros de intentos)
-             svg.append("g")
-                 .attr("class", "axis axis--x")
-                 .attr("transform", `translate(0,${height})`)
-                 .call(d3.axisBottom(xScale).tickFormat(d3.format("d"))); // Formato para enteros
-
-             // Eje Y
-             svg.append("g")
-                 .attr("class", "axis axis--y")
-                 .call(d3.axisLeft(yScale).tickFormat(d3.format("d"))); // Formato para enteros
-
-             // Definir las líneas
-             const lineCorrect = d3.line()
-                 .x(d => xScale(d.attempt))
-                 .y(d => yScale(d.correct));
-
-             const lineIncorrect = d3.line()
-                 .x(d => xScale(d.attempt))
-                 .y(d => yScale(d.incorrect));
-
-             // Añadir la línea de correctas
-             svg.append("path")
-                 .data([data])
-                 .attr("class", "line-correct")
-                 .attr("d", lineCorrect);
-
-             // Añadir los puntos para correctas
-             svg.selectAll(".dot-correct")
-                 .data(data)
-                 .enter().append("circle")
-                 .attr("class", "dot dot-correct")
-                 .attr("cx", d => xScale(d.attempt))
-                 .attr("cy", d => yScale(d.correct))
-                 .attr("r", 4) // Radio del punto
-                 .style("fill", "#4caf50") // Color del punto (verde)
-                 .style("stroke", "white"); // Borde blanco
-
-             // Añadir la línea de incorrectas
-             svg.append("path")
-                 .data([data])
-                 .attr("class", "line-incorrect")
-                 .attr("d", lineIncorrect);
-
-              // Añadir los puntos para incorrectas
-             svg.selectAll(".dot-incorrect")
-                 .data(data)
-                 .enter().append("circle")
-                 .attr("class", "dot dot-incorrect")
-                 .attr("cx", d => xScale(d.attempt))
-                 .attr("cy", d => yScale(d.incorrect))
-                 .attr("r", 4) // Radio del punto
-                 .style("fill", "#ff9800") // Color del punto (naranja)
-                 .style("stroke", "white"); // Borde blanco
+            // Crear un enlace de descarga
+            const link = document.createElement('a');
+            if (link.download !== undefined) { // Verificar si el atributo download es soportado
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', 'historial_quiz_r.csv');
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                // Fallback para navegadores que no soportan el atributo download
+                alert("Tu navegador no soporta la descarga automática. Copia el siguiente texto:\n\n" + csvContent);
+            }
+        }
 
 
-             // --- Eliminar funcionalidad de Tooltip ---
-             // Se elimina la creación del elemento tooltip en window.onload y los event listeners mouseover/mouseout aquí.
-             // Si se desea una alternativa, se puede descomentar el código de etiquetas estáticas.
+        // Función placeholder para enviar datos al backend
+        function sendResultToBackend(resultData) {
+            // ** ESTO ES SOLO UN ESQUELETO **
+            // Para que esto funcione, necesitas un servidor backend configurado
+            // para recibir peticiones POST en la URL especificada.
+            const backendUrl = 'TU_URL_DEL_BACKEND_PARA_GUARDAR_RESULTADOS'; // <<< Reemplaza con tu URL real
 
-             // Opcional: Añadir etiquetas de texto estático sobre los puntos
-             // Esto puede saturar el gráfico si hay muchos intentos.
-             /*
-             attempts.selectAll(".text-correct")
+            console.log('Intentando enviar datos al backend:', resultData); // Log para depuración
+
+            // Descomenta el siguiente bloque para intentar enviar datos (requiere backend)
+            /*
+            fetch(backendUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(resultData),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.error('Error al enviar datos al backend:', response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Respuesta del backend:', data);
+            })
+            .catch((error) => {
+                console.error('Error en la conexión con el backend:', error);
+            });
+            */
+        }
+
+        // Función para dibujar el gráfico de progreso usando D3.js (Línea y Punto)
+        function drawProgressChart() {
+            const results = JSON.parse(localStorage.getItem('quizResults') || '[]');
+            progressChartElement.innerHTML = ''; // Limpiar el área del gráfico anterior
+
+            if (results.length === 0) {
+                // No dibujar gráfico si no hay datos
+                return;
+            }
+
+            const data = results.map((r, i) => ({
+                attempt: i + 1,
+                correct: r.correct,
+                incorrect: r.incorrect
+            }));
+
+            const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+            const width = 600 - margin.left - margin.right;
+            const height = 300 - margin.top - margin.bottom;
+
+            // Seleccionar el contenedor y añadir el SVG
+            const svg = d3.select("#progress-chart").append("svg")
+                .attr("width", "100%") // Usar ancho relativo
+                .attr("height", height + margin.top + margin.bottom)
+                .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`) // Añadir viewBox para responsividad
+                .attr("preserveAspectRatio", "xMidYMid meet") // Mantener aspecto
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            // Escalas
+            const xScale = d3.scaleLinear() // Escala lineal para el eje X (intentos)
+                .range([0, width])
+                .domain([1, d3.max(data, d => d.attempt)]); // El eje X va desde 1 hasta el número máximo de intentos
+
+            const yScale = d3.scaleLinear()
+                .range([height, 0])
+                .domain([0, d3.max(data, d => d.correct + d.incorrect)]); // El eje Y va desde 0 hasta el total de intentadas
+
+            // Eje X (con formato para mostrar números enteros de intentos)
+            svg.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(xScale).tickFormat(d3.format("d"))); // Formato para enteros
+
+            // Eje Y
+            svg.append("g")
+                .attr("class", "axis axis--y")
+                .call(d3.axisLeft(yScale).tickFormat(d3.format("d"))); // Formato para enteros
+
+            // Definir las líneas
+            const lineCorrect = d3.line()
+                .x(d => xScale(d.attempt))
+                .y(d => yScale(d.correct));
+
+            const lineIncorrect = d3.line()
+                .x(d => xScale(d.attempt))
+                .y(d => yScale(d.incorrect));
+
+            // Añadir la línea de correctas
+            svg.append("path")
+                .data([data])
+                .attr("class", "line-correct")
+                .attr("d", lineCorrect);
+
+            // Añadir los puntos para correctas
+            svg.selectAll(".dot-correct")
+                .data(data)
+                .enter().append("circle")
+                .attr("class", "dot dot-correct")
+                .attr("cx", d => xScale(d.attempt))
+                .attr("cy", d => yScale(d.correct))
+                .attr("r", 4) // Radio del punto
+                .style("fill", "#4caf50") // Color del punto (verde)
+                .style("stroke", "white"); // Borde blanco
+
+            // Añadir la línea de incorrectas
+            svg.append("path")
+                .data([data])
+                .attr("class", "line-incorrect")
+                .attr("d", lineIncorrect);
+
+            // Añadir los puntos para incorrectas
+            svg.selectAll(".dot-incorrect")
+                .data(data)
+                .enter().append("circle")
+                .attr("class", "dot dot-incorrect")
+                .attr("cx", d => xScale(d.attempt))
+                .attr("cy", d => yScale(d.incorrect))
+                .attr("r", 4) // Radio del punto
+                .style("fill", "#ff9800") // Color del punto (naranja)
+                .style("stroke", "white"); // Borde blanco
+
+
+            // --- Eliminar funcionalidad de Tooltip ---
+            // Se elimina la creación del elemento tooltip en window.onload y los event listeners mouseover/mouseout aquí.
+            // Si se desea una alternativa, se puede descomentar el código de etiquetas estáticas.
+
+            // Opcional: Añadir etiquetas de texto estático sobre los puntos
+            // Esto puede saturar el gráfico si hay muchos intentos.
+            /*
+            attempts.selectAll(".text-correct")
+                .data(d => [d]) // Bind data to each point group
+                .enter().append("text")
+                .attr("class", "bar-label") // Reutilizar clase si es necesario
+                .attr("x", d => xScale(d.attempt))
+                .attr("y", d => yScale(d.correct) - 8) // Posicionar encima del punto
+                .attr("dy", ".35em")
+                .text(d => d.correct)
+                .style("fill", "#4caf50") // Color del texto (verde)
+                .style("text-anchor", "middle")
+                .style("font-size", "0.7em");
+
+            attempts.selectAll(".text-incorrect")
                  .data(d => [d]) // Bind data to each point group
-                 .enter().append("text")
-                 .attr("class", "bar-label") // Reutilizar clase si es necesario
-                 .attr("x", d => xScale(d.attempt))
-                 .attr("y", d => yScale(d.correct) - 8) // Posicionar encima del punto
+                .enter().append("text")
+                .attr("class", "bar-label") // Reutilizar clase si es necesario
+                .attr("x", d => xScale(d.attempt))
+                .attr("y", d => yScale(d.incorrect) - 8) // Posicionar encima del punto
                  .attr("dy", ".35em")
-                 .text(d => d.correct)
-                 .style("fill", "#4caf50") // Color del texto (verde)
-                 .style("text-anchor", "middle")
-                 .style("font-size", "0.7em");
-
-             attempts.selectAll(".text-incorrect")
-                  .data(d => [d]) // Bind data to each point group
-                 .enter().append("text")
-                 .attr("class", "bar-label") // Reutilizar clase si es necesario
-                 .attr("x", d => xScale(d.attempt))
-                 .attr("y", d => yScale(d.incorrect) - 8) // Posicionar encima del punto
-                  .attr("dy", ".35em")
-                 .text(d => d.incorrect)
-                 .style("fill", "#ff9800") // Color del texto (naranja)
-                 .style("text-anchor", "middle")
-                 .style("font-size", "0.7em");
-             */
+                .text(d => d.incorrect)
+                .style("fill", "#ff9800") // Color del texto (naranja)
+                .style("text-anchor", "middle")
+                .style("font-size", "0.7em");
+            */
 
 
-             // Ajustar el tamaño del SVG para que sea responsivo (básico)
-             // No es necesario redibujar todo en redimensionamiento si se usa viewBox y preserveAspectRatio
-             // d3.select(window).on('resize', () => {
-             //     drawProgressChart();
-             // });
-         }
+            // Ajustar el tamaño del SVG para que sea responsivo (básico)
+            // No es necesario redibujar todo en redimensionamiento si se usa viewBox y preserveAspectRatio
+            // d3.select(window).on('resize', () => {
+            //     drawProgressChart();
+            // });
+        }
 
 
         // Función para cambiar de pestaña
@@ -1622,60 +1719,60 @@
             // Activar el botón de la pestaña seleccionada
             document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
 
-             // Si la pestaña de progreso está activa, dibujar el gráfico
-             if (tabId === 'progress-tab') {
-                 drawProgressChart();
-             }
+            // Si la pestaña de progreso está activa, dibujar el gráfico
+            if (tabId === 'progress-tab') {
+                drawProgressChart();
+            }
         }
 
-         // Función para iniciar un nuevo quiz con la configuración actual
-         function startNewQuiz() {
-             // Leer los valores de configuración
-             const requestedQuestions = parseInt(numQuestionsInput.value, 10);
-             const requestedTime = parseInt(quizTimeInput.value, 10);
+        // Función para iniciar un nuevo quiz con la configuración actual
+        function startNewQuiz() {
+            // Leer los valores de configuración
+            const requestedQuestions = parseInt(numQuestionsInput.value, 10);
+            const requestedTime = parseInt(quizTimeInput.value, 10);
 
-             // Validar los valores de configuración
-             if (isNaN(requestedQuestions) || requestedQuestions < 1 || requestedQuestions > originalQuizData.length) {
-                 alert(`Por favor, ingresa un número de preguntas válido entre 1 y ${originalQuizData.length}.`);
-                 return;
-             }
-             if (isNaN(requestedTime) || requestedTime < 10 || requestedTime > 300) { // Mínimo 10s, Máximo 300s (5 minutos)
-                 alert("Por favor, ingresa un tiempo válido entre 10 y 300 segundos (5 minutos).");
-                 return;
-             }
+            // Validar los valores de configuración
+            if (isNaN(requestedQuestions) || requestedQuestions < 1 || requestedQuestions > originalQuizData.length) {
+                alert(`Por favor, ingresa un número de preguntas válido entre 1 y ${originalQuizData.length}.`);
+                return;
+            }
+            if (isNaN(requestedTime) || requestedTime < 10 || requestedTime > 300) { // Mínimo 10s, Máximo 300s (5 minutos)
+                alert("Por favor, ingresa un tiempo válido entre 10 y 300 segundos (5 minutos).");
+                return;
+            }
 
-             // Aplicar la configuración
-             numberOfQuestions = requestedQuestions;
-             totalQuizTime = requestedTime;
+            // Aplicar la configuración
+            numberOfQuestions = requestedQuestions;
+            totalQuizTime = requestedTime;
 
-             // Reiniciar el estado del quiz
-             currentQuestionIndex = 0;
-             score = 0;
-             quizActive = true;
+            // Reiniciar el estado del quiz
+            currentQuestionIndex = 0;
+            score = 0;
+            quizActive = true;
 
-             // Mezclar las preguntas (solo el número configurado)
-             shuffledQuizData = shuffleArray([...originalQuizData]).slice(0, numberOfQuestions);
+            // Mezclar las preguntas (solo el número configurado)
+            shuffledQuizData = shuffleArray([...originalQuizData]).slice(0, numberOfQuestions);
 
-             // Reiniciar la visualización del puntaje
-             scoreAttemptedButton.textContent = `Intentadas: 0`;
-             scoreCorrectButton.textContent = `Correctas: 0`;
-             scoreIncorrectButton.textContent = `Incorrectas: 0`;
+            // Reiniciar la visualización del puntaje
+            scoreAttemptedButton.textContent = `Intentadas: 0`;
+            scoreCorrectButton.textContent = `Correctas: 0`;
+            scoreIncorrectButton.textContent = `Incorrectas: 0`;
 
-             // Ocultar pantalla final y mostrar contenido del quiz
-             endScreenElement.classList.add('hidden');
-             quizContentElement.classList.remove('hidden');
-             scoreContainerElement.classList.remove('hidden');
-             progressChartContainer.classList.add('hidden'); // Ocultar gráfico
+            // Ocultar pantalla final y mostrar contenido del quiz
+            endScreenElement.classList.add('hidden');
+            quizContentElement.classList.remove('hidden');
+            scoreContainerElement.classList.remove('hidden');
+            progressChartContainer.classList.add('hidden'); // Ocultar gráfico
 
-             // Iniciar temporizador y cargar primera pregunta
-             startGlobalTimer();
-             loadQuestion();
+            // Iniciar temporizador y cargar primera pregunta
+            startGlobalTimer();
+            loadQuestion();
 
-             // Cambiar a la pestaña de Entrenamiento
-             changeTab('quiz-tab');
+            // Cambiar a la pestaña de Entrenamiento
+            changeTab('quiz-tab');
 
-             console.log(`Quiz iniciado con ${numberOfQuestions} preguntas y ${totalQuizTime} segundos.`);
-         }
+            console.log(`Quiz iniciado con ${numberOfQuestions} preguntas y ${totalQuizTime} segundos.`);
+        }
 
 
         // Función para reiniciar el quiz desde la pantalla final
@@ -1693,9 +1790,9 @@
             shuffledQuizData = shuffleArray([...originalQuizData]).slice(0, numberOfQuestions);
 
             // Reiniciar la visualización del puntaje antes de cargar la primera pregunta
-             scoreAttemptedButton.textContent = `Intentadas: 0`;
-             scoreCorrectButton.textContent = `Correctas: 0`;
-             scoreIncorrectButton.textContent = `Incorrectas: 0`;
+            scoreAttemptedButton.textContent = `Intentadas: 0`;
+            scoreCorrectButton.textContent = `Correctas: 0`;
+            scoreIncorrectButton.textContent = `Incorrectas: 0`;
 
             // Asegurarse de que el botón de responder esté visible y los de siguiente/reiniciar ocultos
             submitButton.classList.remove('hidden');
@@ -1708,17 +1805,17 @@
             loadQuestion(); // Cargar la primera pregunta
             startGlobalTimer(); // Iniciar el temporizador global
 
-             // Ocultar la pantalla final al iniciar un nuevo quiz
+            // Ocultar la pantalla final al iniciar un nuevo quiz
             endScreenElement.classList.add('hidden');
-             // Asegurarse de que el contenido del quiz esté visible
+            // Asegurarse de que el contenido del quiz esté visible
             quizContentElement.classList.remove('hidden');
-             // Asegurarse de que el contenedor de puntaje principal sea visible
+            // Asegurarse de que el contenedor de puntaje principal sea visible
             scoreContainerElement.classList.remove('hidden');
             progressChartContainer.classList.add('hidden'); // Ocultar el gráfico al reiniciar
 
             // Cambiar a la pestaña de Entrenamiento
             changeTab('quiz-tab');
-             console.log("Quiz reiniciado."); // Log de depuración
+            console.log("Quiz reiniciado."); // Log de depuración
         }
 
 
@@ -1733,7 +1830,7 @@
             }
             // Redibujar el gráfico para aplicar estilos de modo oscuro si está visible
             if (!progressChartContainer.classList.contains('hidden')) {
-                 drawProgressChart();
+                drawProgressChart();
             }
         }
 
@@ -1804,23 +1901,24 @@
             });
 
 
-             // Cargar la preferencia de modo oscuro guardada (si existe)
-             if (localStorage.getItem('darkMode') === 'enabled') {
-                 document.body.classList.add('dark-mode');
-             }
+            // Cargar la preferencia de modo oscuro guardada (si existe)
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+            }
 
-             // Cargar y mostrar el historial de sesiones al cargar la página
-             displaySessionHistory();
+            // Cargar y mostrar el historial de sesiones al cargar la página
+            displaySessionHistory();
 
-             // Inicializar la interfaz mostrando la primera pestaña (Configuración)
-             changeTab('config-tab');
+            // Inicializar la interfaz mostrando la primera pestaña (Configuración)
+            changeTab('config-tab');
 
-             // No iniciar el quiz automáticamente, esperar al botón de inicio
-             // startGlobalTimer(); // Eliminado
-             // loadQuestion(); // Eliminado
+            // No iniciar el quiz automáticamente, esperar al botón de inicio
+            // startGlobalTimer(); // Eliminado
+            // loadQuestion(); // Eliminado
         };
 
     </script>
 
 </body>
+
 </html>
