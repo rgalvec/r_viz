@@ -308,7 +308,7 @@
 	<script>
 		// Array de objetos para almacenar las preguntas, opciones, respuestas correctas y explicaciones.
 		// Basado en el contenido proporcionado por el usuario.
-		const quizData = [
+		const originalQuizData = [ // Mantener una copia original para reiniciar
 			{
 				question: "¿Cuál es la función principal del menú 'Publish' en el contexto de R Markdown o Quarto?",
 				options: {
@@ -421,6 +421,7 @@
 			}
 		];
 
+		let shuffledQuizData = []; // Array para almacenar las preguntas aleatorizadas
 		let currentQuestionIndex = 0; // Índice de la pregunta actual
 		let score = 0; // Puntaje del usuario
 		let timerInterval; // Variable para almacenar el intervalo del temporizador
@@ -439,6 +440,26 @@
 		let timerAreaElement;
 		let quizContentElement;
 		let endScreenElement;
+
+		// Función para mezclar un array (Algoritmo Fisher-Yates (Knuth) Shuffle)
+		function shuffleArray(array) {
+			for (let i = array.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[array[i], array[j]] = [array[j], array[i]]; // Intercambiar elementos
+			}
+			return array;
+		}
+
+		// Función para mezclar las opciones de un objeto de opciones
+		function shuffleOptions(optionsObject) {
+			const optionKeys = Object.keys(optionsObject);
+			shuffleArray(optionKeys); // Mezclar las claves (A, B, C, D)
+			const shuffledOptions = {};
+			optionKeys.forEach(key => {
+				shuffledOptions[key] = optionsObject[key]; // Reconstruir el objeto con el orden mezclado
+			});
+			return shuffledOptions;
+		}
 
 
 		// Función para iniciar el temporizador global del quiz
@@ -478,16 +499,19 @@
 			timerAreaElement.classList.remove('hidden'); // Asegurarse de que el temporizador sea visible
 
 
-			// Obtener la pregunta actual del array quizData
-			const currentQuestion = quizData[currentQuestionIndex];
+			// Obtener la pregunta actual del array de preguntas aleatorizadas
+			const currentQuestion = shuffledQuizData[currentQuestionIndex];
 
 			// Mostrar el texto de la pregunta
 			questionTextElement.textContent = currentQuestion.question;
 
-			// Crear y mostrar las opciones de respuesta
-			for (const optionKey in currentQuestion.options) {
-				if (currentQuestion.options.hasOwnProperty(optionKey)) {
-					const optionValue = currentQuestion.options[optionKey];
+			// Mezclar las opciones de la pregunta actual
+			const shuffledOptions = shuffleOptions(currentQuestion.options);
+
+			// Crear y mostrar las opciones de respuesta mezcladas
+			for (const optionKey in shuffledOptions) {
+				if (shuffledOptions.hasOwnProperty(optionKey)) {
+					const optionValue = shuffledOptions[optionKey];
 
 					// Crear un div para cada opción para mejor estructura y padding
 					const optionDiv = document.createElement('div');
@@ -553,8 +577,9 @@
 				userAnswer = selectedOption.value;
 			}
 
-			const correctAnswer = quizData[currentQuestionIndex].correctAnswer;
-			const explanation = quizData[currentQuestionIndex].explanation;
+			// Obtener la respuesta correcta de la pregunta actual (del array mezclado)
+			const correctAnswer = shuffledQuizData[currentQuestionIndex].correctAnswer;
+			const explanation = shuffledQuizData[currentQuestionIndex].explanation;
 
 			// Mostrar el área de feedback
 			feedbackAreaElement.classList.remove('hidden');
@@ -599,8 +624,8 @@
 
 			currentQuestionIndex++; // Incrementar el índice de la pregunta
 
-			// Verificar si hay más preguntas y si el tiempo no se ha agotado
-			if (currentQuestionIndex < quizData.length && timeLeft > 0) {
+			// Verificar si hay más preguntas (en el array mezclado) y si el tiempo no se ha agotado
+			if (currentQuestionIndex < shuffledQuizData.length && timeLeft > 0) {
 				loadQuestion(); // Cargar la siguiente pregunta
 			} else {
 				endQuiz(false); // Finalizar el quiz (ya sea por terminar preguntas o por tiempo agotado)
@@ -609,7 +634,8 @@
 
 		// Función para actualizar la visualización del puntaje
 		function updateScoreDisplay() {
-			scoreAreaElement.textContent = `Puntaje: ${score} / ${quizData.length}`;
+			// Mostrar el puntaje actual sobre el total de preguntas en el array mezclado
+			scoreAreaElement.textContent = `Puntaje: ${score} / ${shuffledQuizData.length}`;
 		}
 
 		// Función para finalizar el quiz
@@ -652,7 +678,7 @@
 
 			const finalScoreDisplay = document.createElement('p');
 			finalScoreDisplay.classList.add('score', 'text-center', 'mt-4');
-			finalScoreDisplay.textContent = `Tu puntaje final es: ${score} de ${quizData.length}`;
+			finalScoreDisplay.textContent = `Tu puntaje final es: ${score} de ${quizData.length}`; // Mostrar puntaje sobre el total original
 
 
 			// Limpiar el contenido anterior de la pantalla final y añadir los nuevos elementos
@@ -674,6 +700,10 @@
 			currentQuestionIndex = 0; // Reiniciar índice de pregunta
 			score = 0; // Reiniciar puntaje
 			quizActive = true; // Marcar el quiz como activo
+
+			// Mezclar las preguntas nuevamente al reiniciar
+			shuffledQuizData = shuffleArray([...originalQuizData]); // Usar una copia del array original
+
 			updateScoreDisplay(); // Actualizar visualización del puntaje
 			loadQuestion(); // Cargar la primera pregunta
 			startGlobalTimer(); // Iniciar el temporizador global
@@ -705,6 +735,9 @@
 			submitButton.addEventListener('click', checkAnswer);
 			nextButton.addEventListener('click', nextQuestion);
 			restartButton.addEventListener('click', restartQuiz); // Event listener para el botón de reiniciar
+
+			// Mezclar las preguntas al cargar la página por primera vez
+			shuffledQuizData = shuffleArray([...originalQuizData]); // Usar una copia del array original
 
 			// Iniciar el temporizador global y cargar la primera pregunta al iniciar la página
 			startGlobalTimer(); // Iniciar el temporizador global
