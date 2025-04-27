@@ -191,14 +191,49 @@
 			/* Color de texto para la explicación */
 		}
 
-		.score {
+		.score-container {
 			margin-top: 20px;
-			font-size: 1.2em;
-			font-weight: bold;
 			text-align: center;
-			color: #007bff;
-			/* Azul para el puntaje */
+			display: flex;
+			/* Usar flexbox para alinear los botones de puntaje */
+			justify-content: center;
+			/* Centrar los botones */
+			gap: 10px;
+			/* Espacio entre los botones */
+			flex-wrap: wrap;
+			/* Permitir que los botones se envuelvan en pantallas pequeñas */
 		}
+
+		.score-button {
+			font-size: 1em;
+			font-weight: bold;
+			padding: 8px 15px;
+			/* Padding para que parezcan botones */
+			border-radius: 8px;
+			/* Bordes redondeados */
+			border: none;
+			/* Sin borde por defecto */
+			color: #ffffff;
+			/* Texto blanco */
+			display: inline-block;
+			/* Para que se muestren en línea */
+		}
+
+		.score-button.attempted {
+			background-color: #007bff;
+			/* Azul para Intentadas */
+		}
+
+		.score-button.correct {
+			background-color: #28a745;
+			/* Verde para Correctas */
+		}
+
+		.score-button.incorrect {
+			background-color: #ff9800;
+			/* Naranja para Incorrectas */
+		}
+
 
 		.button {
 			/* Estilo base del botón con Tailwind */
@@ -243,10 +278,6 @@
 			/* Azul para el título final */
 		}
 
-		.quiz-container .score {
-			color: #ff9800;
-			/* Naranja para el puntaje final */
-		}
 
 		.timer {
 			font-size: 1.5em;
@@ -342,8 +373,7 @@
 			</div>
 		</div>
 
-		<div class="score" id="score-area">
-			Puntaje: 0 / 0
+		<div class="score-container" id="score-area">
 		</div>
 
 		<div id="end-screen" class="hidden">
@@ -470,7 +500,7 @@
 
 		let shuffledQuizData = []; // Array para almacenar las preguntas aleatorizadas
 		let currentQuestionIndex = 0; // Índice de la pregunta actual
-		let score = 0; // Puntaje del usuario
+		let score = 0; // Puntaje del usuario (solo correctas)
 		let timerInterval; // Variable para almacenar el intervalo del temporizador
 		const TOTAL_QUIZ_TIME = 60; // Tiempo total en segundos para todo el quiz
 		let timeLeft = TOTAL_QUIZ_TIME; // Tiempo restante total del quiz
@@ -483,10 +513,14 @@
 		let nextButton;
 		let restartButton;
 		let feedbackAreaElement;
-		let scoreAreaElement;
+		let scoreAttemptedButton; // Botón para Intentadas
+		let scoreCorrectButton;   // Botón para Correctas
+		let scoreIncorrectButton; // Botón para Incorrectas
 		let timerAreaElement;
 		let quizContentElement;
 		let endScreenElement;
+		let scoreContainerElement; // Contenedor de los botones de puntaje
+
 
 		// Función para mezclar un array (Algoritmo Fisher-Yates (Knuth) Shuffle)
 		function shuffleArray(array) {
@@ -544,6 +578,7 @@
 			quizContentElement.classList.remove('hidden');
 			endScreenElement.classList.add('hidden');
 			timerAreaElement.classList.remove('hidden'); // Asegurarse de que el temporizador sea visible
+			scoreContainerElement.classList.remove('hidden'); // Asegurarse de que el contenedor de puntaje sea visible
 
 
 			// Obtener la pregunta actual del array de preguntas aleatorizadas
@@ -589,7 +624,7 @@
 			// Habilitar el botón de responder
 			submitButton.disabled = false;
 
-			// Actualizar el puntaje mostrado (puntaje actual / total de preguntas)
+			// Actualizar el puntaje mostrado (Intentadas, Correctas, Incorrectas)
 			updateScoreDisplay();
 
 			// Deshabilitar opciones si el tiempo se agotó (aunque endQuiz debería manejar esto)
@@ -661,7 +696,7 @@
 			}
 
 
-			// Actualizar el puntaje mostrado
+			// Actualizar la visualización del puntaje (después de incrementar el score si fue correcta)
 			updateScoreDisplay();
 		}
 
@@ -681,8 +716,14 @@
 
 		// Función para actualizar la visualización del puntaje
 		function updateScoreDisplay() {
-			// Mostrar el puntaje actual sobre el total de preguntas en el array mezclado
-			scoreAreaElement.textContent = `Puntaje: ${score} / ${shuffledQuizData.length}`;
+			const attempted = currentQuestionIndex + (quizActive && !submitButton.classList.contains('hidden') && document.querySelector('input[name="answer"]:checked') ? 1 : 0); // Contar la pregunta actual si se ha respondido
+			const correct = score;
+			const incorrect = attempted - correct;
+
+			// Actualizar el texto de los botones de puntaje
+			scoreAttemptedButton.textContent = `Intentadas: ${attempted}`;
+			scoreCorrectButton.textContent = `Correctas: ${correct}`;
+			scoreIncorrectButton.textContent = `Incorrectas: ${incorrect}`;
 		}
 
 		// Función para finalizar el quiz
@@ -696,6 +737,8 @@
 
 			// Ocultar el contenido del quiz
 			quizContentElement.classList.add('hidden');
+			scoreContainerElement.classList.add('hidden'); // Ocultar los botones de puntaje principales
+
 
 			// Mostrar la pantalla final
 			endScreenElement.classList.remove('hidden');
@@ -709,13 +752,19 @@
 				endTitle.textContent = '¡Quiz Finalizado!';
 			}
 
+			// Calcular el puntaje final detallado
+			const totalAttempted = currentQuestionIndex; // Total de preguntas que se intentaron
+			const finalCorrect = score;
+			const finalIncorrect = totalAttempted - finalCorrect;
+
+
 			// Determinar el mensaje basado en el puntaje
 			let scoreMessageText = "";
-			if (score < 3) {
+			if (finalCorrect < 3) {
 				scoreMessageText = "Sigue repasando el contenido, cada intento puedes mejorar.";
-			} else if (score >= 3 && score < 5) {
+			} else if (finalCorrect >= 3 && finalCorrect < 5) {
 				scoreMessageText = "¡Bien! Estás avanzando por el camino de R, sigue repasando.";
-			} else { // score >= 5
+			} else { // finalCorrect >= 5
 				scoreMessageText = "¡Sigue así! Estás aprendiendo a trabajar con R.";
 			}
 
@@ -723,15 +772,32 @@
 			scoreMessageElement.classList.add('end-message', 'text-center');
 			scoreMessageElement.textContent = scoreMessageText;
 
-			const finalScoreDisplay = document.createElement('p');
-			finalScoreDisplay.classList.add('score', 'text-center', 'mt-4');
-			finalScoreDisplay.textContent = `Tu puntaje final es: ${score} de ${originalQuizData.length}`; // Mostrar puntaje sobre el total original
+			// Crear un nuevo contenedor para los botones de puntaje finales
+			const finalScoreContainer = document.createElement('div');
+			finalScoreContainer.classList.add('score-container'); // Reutilizar la clase de estilo
+
+
+			// Crear y añadir los botones de puntaje finales
+			const finalAttemptedButton = document.createElement('span');
+			finalAttemptedButton.classList.add('score-button', 'attempted');
+			finalAttemptedButton.textContent = `Intentadas: ${totalAttempted}`;
+			finalScoreContainer.appendChild(finalAttemptedButton);
+
+			const finalCorrectButton = document.createElement('span');
+			finalCorrectButton.classList.add('score-button', 'correct');
+			finalCorrectButton.textContent = `Correctas: ${finalCorrect}`;
+			finalScoreContainer.appendChild(finalCorrectButton);
+
+			const finalIncorrectButton = document.createElement('span');
+			finalIncorrectButton.classList.add('score-button', 'incorrect');
+			finalIncorrectButton.textContent = `Incorrectas: ${finalIncorrect}`;
+			finalScoreContainer.appendChild(finalIncorrectButton);
 
 
 			// Limpiar el contenido anterior de la pantalla final y añadir los nuevos elementos
 			endScreenElement.innerHTML = '';
 			endScreenElement.appendChild(endTitle);
-			endScreenElement.appendChild(finalScoreDisplay); // Añadir el puntaje final
+			endScreenElement.appendChild(finalScoreContainer); // Añadir el contenedor de botones de puntaje finales
 			endScreenElement.appendChild(scoreMessageElement); // Añadir el mensaje basado en el puntaje
 
 			// --- Agregar la sección de resumen de preguntas respondidas ---
@@ -779,7 +845,7 @@
 			endScreenElement.appendChild(restartButton); // Añadir el botón de reiniciar a la pantalla final
 
 			// Asegurarse de que el área de puntaje principal esté oculta al mostrar el puntaje final en la pantalla final
-			scoreAreaElement.classList.add('hidden');
+			// scoreAreaElement.classList.add('hidden'); // Esto ya no es necesario ya que ocultamos scoreContainerElement
 		}
 
 		// Función para reiniciar el quiz
@@ -791,7 +857,12 @@
 			// Mezclar las preguntas nuevamente al reiniciar
 			shuffledQuizData = shuffleArray([...originalQuizData]); // Usar una copia del array original
 
-			updateScoreDisplay(); // Actualizar visualización del puntaje
+			// Reiniciar la visualización del puntaje antes de cargar la primera pregunta
+			scoreAttemptedButton.textContent = `Intentadas: 0`;
+			scoreCorrectButton.textContent = `Correctas: 0`;
+			scoreIncorrectButton.textContent = `Incorrectas: 0`;
+
+
 			loadQuestion(); // Cargar la primera pregunta
 			startGlobalTimer(); // Iniciar el temporizador global
 
@@ -799,8 +870,8 @@
 			endScreenElement.classList.add('hidden');
 			// Asegurarse de que el contenido del quiz esté visible
 			quizContentElement.classList.remove('hidden');
-			// Asegurarse de que el área de puntaje principal sea visible
-			scoreAreaElement.classList.remove('hidden');
+			// Asegurarse de que el contenedor de puntaje principal sea visible
+			scoreContainerElement.classList.remove('hidden');
 		}
 
 
@@ -813,10 +884,24 @@
 			nextButton = document.getElementById('next-question');
 			restartButton = document.getElementById('restart-quiz'); // Obtener referencia al botón de reiniciar
 			feedbackAreaElement = document.getElementById('feedback-area');
-			scoreAreaElement = document.getElementById('score-area');
+			scoreContainerElement = document.getElementById('score-area'); // Referencia al contenedor
 			timerAreaElement = document.getElementById('timer-area');
 			quizContentElement = document.getElementById('quiz-content');
 			endScreenElement = document.getElementById('end-screen');
+
+			// Crear los elementos para los botones de puntaje
+			scoreAttemptedButton = document.createElement('span');
+			scoreAttemptedButton.classList.add('score-button', 'attempted');
+			scoreContainerElement.appendChild(scoreAttemptedButton);
+
+			scoreCorrectButton = document.createElement('span');
+			scoreCorrectButton.classList.add('score-button', 'correct');
+			scoreContainerElement.appendChild(scoreCorrectButton);
+
+			scoreIncorrectButton = document.createElement('span');
+			scoreIncorrectButton.classList.add('score-button', 'incorrect');
+			scoreContainerElement.appendChild(scoreIncorrectButton);
+
 
 			// Event listeners para los botones - ¡Ahora dentro de window.onload!
 			submitButton.addEventListener('click', checkAnswer);
