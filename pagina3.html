@@ -4,23 +4,20 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Quiz: R, R Markdown, Quarto y Shiny</title>
+	<title>EntrenaR: Preguntas y respuestas sobre trabajo con R</title>
 	<script src="https://cdn.tailwindcss.com"></script>
-	<script src="https://d3js.org/d3.v7.min.js"></script>
 	<style>
-		/* Estilos base para el modo claro */
+		/* Estilos personalizados para la paleta de colores y alineación */
 		body {
 			font-family: "Inter", sans-serif;
+			/* Usar fuente Inter */
 			background-color: #f4f7f6;
-			color: #333;
-			/* Texto oscuro por defecto */
+			/* Color de fondo suave */
 			display: flex;
 			justify-content: center;
 			align-items: center;
 			min-height: 100vh;
 			padding: 20px;
-			transition: background-color 0.3s ease, color 0.3s ease;
-			/* Transición suave para cambio de modo */
 		}
 
 		.quiz-container {
@@ -28,14 +25,14 @@
 			/* Fondo blanco */
 			padding: 30px;
 			border-radius: 15px;
+			/* Bordes redondeados */
 			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			/* Sombra suave */
 			max-width: 700px;
+			/* Ancho máximo */
 			width: 100%;
 			text-align: center;
-			position: relative;
-			/* Necesario para posicionar el botón de modo oscuro */
-			transition: background-color 0.3s ease, box-shadow 0.3s ease;
-			/* Transición suave */
+			/* Centrar contenido */
 		}
 
 		.question {
@@ -43,26 +40,32 @@
 			font-size: 1.1em;
 			font-weight: bold;
 			color: #333;
+			/* Color de texto oscuro para la pregunta */
 			text-align: left;
+			/* Alinear texto de pregunta a la izquierda */
 		}
 
 		.options {
 			text-align: left;
+			/* Alinear opciones a la izquierda */
 		}
 
 		.options label {
 			display: flex;
+			/* Usar flexbox para alinear input y texto */
 			align-items: center;
+			/* Centrar verticalmente */
 			margin-bottom: 10px;
 			padding: 10px;
 			border: 1px solid #ddd;
 			border-radius: 8px;
 			cursor: pointer;
 			transition: background-color 0.3s ease, border-color 0.3s ease;
+			/* Transición suave */
 			position: relative;
+			/* Necesario para posicionar el pseudo-elemento */
 			padding-left: 35px;
-			color: #333;
-			/* Color de texto por defecto */
+			/* Espacio a la izquierda para el cuadrado personalizado */
 		}
 
 		.options label:hover {
@@ -75,51 +78,76 @@
 		/* Ocultar el radio button nativo */
 		.options input[type="radio"] {
 			position: absolute;
+			/* Posicionamiento absoluto para sacarlo del flujo */
 			opacity: 0;
+			/* Hacerlo completamente transparente */
 			cursor: pointer;
+			/* Mantener el cursor de puntero */
 			height: 0;
+			/* Altura cero */
 			width: 0;
+			/* Ancho cero */
 		}
 
 		/* Crear el cuadrado personalizado */
 		.options label::before {
 			content: '';
+			/* Contenido vacío es necesario para pseudo-elementos */
 			position: absolute;
+			/* Posicionamiento absoluto con respecto al label */
 			left: 10px;
+			/* Distancia desde el borde izquierdo del label */
 			top: 50%;
+			/* Centrar verticalmente */
 			transform: translateY(-50%);
+			/* Ajuste final para centrado perfecto */
 			width: 20px;
+			/* Tamaño del cuadrado */
 			height: 20px;
+			/* Tamaño del cuadrado */
 			border: 2px solid #007bff;
+			/* Borde azul */
 			border-radius: 4px;
+			/* Bordes ligeramente redondeados para el cuadrado */
 			background-color: #fff;
+			/* Fondo blanco */
 			transition: all 0.3s ease;
+			/* Transición suave para cambios */
 		}
 
 		/* Estilo para el cuadrado cuando el radio button está seleccionado */
 		.options input[type="radio"]:checked+label::before {
 			background-color: #007bff;
+			/* Fondo azul cuando está seleccionado */
 			border-color: #007bff;
+			/* Borde azul cuando está seleccionado */
 		}
 
-		/* Estilo para el punto interior del cuadrado */
+		/* Estilo para el punto interior del cuadrado (opcional, si se desea un punto) */
 		.options label::after {
 			content: '';
 			position: absolute;
 			left: 16px;
+			/* Ajustar la posición para que quede centrado en el cuadrado */
 			top: 50%;
 			transform: translateY(-50%);
 			width: 8px;
+			/* Tamaño del punto */
 			height: 8px;
+			/* Tamaño del punto */
 			border-radius: 50%;
+			/* Forma redonda */
 			background-color: #fff;
+			/* Color blanco para el punto */
 			opacity: 0;
+			/* Ocultar por defecto */
 			transition: opacity 0.3s ease;
 		}
 
 		/* Mostrar el punto interior cuando el radio button está seleccionado */
 		.options input[type="radio"]:checked+label::after {
 			opacity: 1;
+			/* Mostrar el punto */
 		}
 
 
@@ -128,23 +156,31 @@
 			padding: 15px;
 			border-radius: 8px;
 			text-align: left;
+			/* Alinear feedback a la izquierda */
 		}
 
 		.feedback.correct {
 			background-color: #d4edda;
+			/* Verde claro (mantener para correcto por convención) */
 			color: #155724;
+			/* Verde oscuro */
 			border-color: #c3e6cb;
 		}
 
 		.feedback.incorrect {
 			background-color: #f8d7da;
+			/* Rojo claro (mantener para incorrecto por convención) */
 			color: #721c24;
+			/* Rojo oscuro */
 			border-color: #f5c6cb;
 		}
 
+		/* Estilo para el feedback de "selecciona una opción" */
 		.feedback.warning {
 			background-color: #fff3cd;
+			/* Amarillo claro */
 			color: #856404;
+			/* Amarillo oscuro */
 			border-color: #ffeeba;
 		}
 
@@ -152,25 +188,35 @@
 			margin-top: 10px;
 			font-size: 0.95em;
 			color: #555;
+			/* Color de texto para la explicación */
 		}
 
 		.score-container {
 			margin-top: 20px;
 			text-align: center;
 			display: flex;
+			/* Usar flexbox para alinear los botones de puntaje */
 			justify-content: center;
+			/* Centrar los botones */
 			gap: 10px;
+			/* Espacio entre los botones */
 			flex-wrap: wrap;
+			/* Permitir que los botones se envuelvan en pantallas pequeñas */
 		}
 
 		.score-button {
 			font-size: 1em;
 			font-weight: bold;
 			padding: 8px 15px;
+			/* Padding para que parezcan botones */
 			border-radius: 8px;
+			/* Bordes redondeados */
 			border: none;
+			/* Sin borde por defecto */
 			color: #ffffff;
+			/* Texto blanco */
 			display: inline-block;
+			/* Para que se muestren en línea */
 		}
 
 		.score-button.attempted {
@@ -190,45 +236,64 @@
 
 
 		.button {
-			@apply text-white font-bold py-2 px-4 rounded-lg mt-4 transition duration-0;
-			/* Transición más rápida */
+			/* Estilo base del botón con Tailwind */
+			@apply text-white font-bold py-2 px-4 rounded-lg mt-4 transition duration-300 ease-in-out;
 			width: auto;
+			/* Ancho automático para que sea más pequeño */
 			display: block;
+			/* Para que margin: auto funcione */
 			margin-left: auto;
+			/* Centrar el botón */
 			margin-right: auto;
+			/* Centrar el botón */
 			background-color: #007bff;
+			/* Fondo azul */
 			color: #ffffff;
+			/* Letras blancas */
 			border: 2px solid #0056b3;
+			/* Añadir un borde azul más oscuro */
 			cursor: pointer;
 			text-decoration: none;
+			/* Asegurarse de que no se vea como enlace */
 			padding: 10px 20px;
+			/* Ajustar padding para que se vea más como botón */
 		}
 
 		.button:disabled {
 			@apply bg-gray-400 hover:bg-gray-400 cursor-not-allowed;
 			border-color: #6b7280;
+			/* Borde gris para botón deshabilitado */
 		}
 
 		.button:hover:not(:disabled) {
 			background-color: #0056b3;
+			/* Azul más oscuro en hover */
 			border-color: #003f80;
+			/* Borde aún más oscuro en hover */
 		}
 
 		/* Estilo para el mensaje final del quiz */
 		.quiz-container h2 {
 			color: #007bff;
+			/* Azul para el título final */
 		}
 
 
 		.timer {
 			font-size: 1.5em;
+			/* Aumentar tamaño de fuente */
 			font-weight: bold;
 			color: #ff9800;
+			/* Naranja para el temporizador */
 			margin-bottom: 15px;
 			padding: 10px;
+			/* Añadir padding */
 			border: 2px solid #ff9800;
+			/* Borde naranja */
 			border-radius: 8px;
+			/* Bordes redondeados */
 			display: inline-block;
+			/* Para que el borde se ajuste al contenido */
 		}
 
 		.end-message {
@@ -242,414 +307,47 @@
 			margin-top: 30px;
 			padding-top: 20px;
 			border-top: 1px solid #eee;
+			/* Línea separadora */
 			text-align: left;
+			/* Alinear resumen a la izquierda */
 		}
-
-		body.dark-mode .summary-section {
-			border-top-color: #4a5568;
-			/* Borde separador oscuro */
-		}
-
 
 		.summary-section h3 {
 			font-size: 1.2em;
 			font-weight: bold;
 			margin-bottom: 15px;
 			color: #007bff;
+			/* Azul para el título del resumen */
 			text-align: center;
-		}
-
-		body.dark-mode .summary-section h3 {
-			color: #007bff;
-			/* Azul para título del resumen */
+			/* Centrar título del resumen */
 		}
 
 		.summary-item {
 			margin-bottom: 20px;
 			padding: 15px;
 			background-color: #f9f9f9;
+			/* Fondo ligeramente gris para cada item */
 			border-radius: 8px;
 			border: 1px solid #eee;
 		}
 
-		body.dark-mode .summary-item {
-			background-color: #2d3748;
-			border-color: #4a5568;
-		}
-
-
 		.summary-item strong {
 			color: #333;
+			/* Color oscuro para el texto de la pregunta */
 		}
-
-		body.dark-mode .summary-item strong {
-			color: #e2e8f0;
-			/* Texto de pregunta claro */
-		}
-
 
 		.summary-item .correct-answer {
 			margin-top: 5px;
 			font-weight: bold;
 			color: #155724;
+			/* Verde oscuro para la respuesta correcta */
 		}
-
-		body.dark-mode .summary-item .correct-answer {
-			color: #48bb78;
-			/* Verde en modo oscuro */
-		}
-
 
 		.summary-item .explanation {
 			margin-top: 5px;
 			font-size: 0.9em;
 			color: #555;
-		}
-
-		body.dark-mode .summary-item .explanation {
-			color: #cbd5e0;
-			/* Texto de explicación claro */
-		}
-
-
-		/* Estilos para el modo oscuro */
-		body.dark-mode {
-			background-color: #1a202c;
-			/* Fondo oscuro */
-			color: #e2e8f0;
-			/* Texto claro */
-		}
-
-		body.dark-mode .quiz-container {
-			background-color: #2d3748;
-			/* Fondo oscuro para el contenedor */
-			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-		}
-
-		body.dark-mode h1 {
-			/* Ajustar color del título principal en modo oscuro */
-			color: #e2e8f0;
-		}
-
-		body.dark-mode .question {
-			color: #e2e8f0;
-			/* Texto de pregunta claro */
-		}
-
-		body.dark-mode .options label {
-			border-color: #4a5568;
-			/* Borde más oscuro */
-			color: #e2e8f0;
-			/* Texto de opción claro */
-		}
-
-		body.dark-mode .options label:hover {
-			background-color: #4a5568;
-			/* Fondo oscuro en hover */
-			border-color: #007bff;
-			/* Borde azul en hover */
-		}
-
-		body.dark-mode .options label::before {
-			border-color: #007bff;
-			/* Borde azul */
-			background-color: #2d3748;
-			/* Fondo oscuro */
-		}
-
-		body.dark-mode .options input[type="radio"]:checked+label::before {
-			background-color: #007bff;
-			/* Fondo azul seleccionado */
-			border-color: #007bff;
-		}
-
-		body.dark-mode .options label::after {
-			background-color: #e2e8f0;
-			/* Punto interior claro */
-		}
-
-		body.dark-mode .feedback.correct {
-			background-color: #48bb78;
-			/* Verde más oscuro */
-			color: #1a202c;
-			/* Texto oscuro */
-			border-color: #38a169;
-		}
-
-		body.dark-mode .feedback.incorrect {
-			background-color: #f56565;
-			/* Rojo más oscuro */
-			color: #1a202c;
-			/* Texto oscuro */
-			border-color: #e53e3e;
-		}
-
-		body.dark-mode .feedback.warning {
-			background-color: #f6e05e;
-			/* Amarillo más oscuro */
-			color: #2d3748;
-			/* Texto oscuro */
-			border-color: #d69e2e;
-		}
-
-		body.dark-mode .explanation {
-			color: #cbd5e0;
-			/* Texto de explicación claro */
-		}
-
-		body.dark-mode .quiz-container h2 {
-			color: #007bff;
-			/* Azul para título final */
-		}
-
-		body.dark-mode .quiz-container .score-button.attempted {
-			background-color: #007bff;
-			/* Azul para Intentadas */
-		}
-
-		body.dark-mode .quiz-container .score-button.correct {
-			background-color: #48bb78;
-			/* Verde en modo oscuro */
-		}
-
-		body.dark-mode .quiz-container .score-button.incorrect {
-			background-color: #ff9800;
-			/* Naranja en modo oscuro */
-		}
-
-		body.dark-mode .timer {
-			color: #ff9800;
-			/* Naranja para el temporizador */
-			border-color: #ff9800;
-		}
-
-		body.dark-mode .end-message {
-			color: #e2e8f0;
-			/* Texto claro */
-		}
-
-		body.dark-mode .summary-section {
-			border-top-color: #4a5568;
-			/* Borde separador oscuro */
-		}
-
-		body.dark-mode .summary-section h3 {
-			color: #007bff;
-			/* Azul para título del resumen */
-		}
-
-		body.dark-mode .summary-item {
-			background-color: #2d3748;
-			/* Fondo oscuro */
-			border-color: #4a5568;
-			/* Borde oscuro */
-		}
-
-		body.dark-mode .summary-item strong {
-			color: #e2e8f0;
-			/* Texto de pregunta claro */
-		}
-
-		body.dark-mode .summary-item .correct-answer {
-			color: #48bb78;
-			/* Verde en modo oscuro */
-		}
-
-		body.dark-mode .summary-item .explanation {
-			color: #cbd5e0;
-			/* Texto de explicación claro */
-		}
-
-		/* Estilo para el botón de modo oscuro */
-		#dark-mode-toggle {
-			position: absolute;
-			top: 15px;
-			right: 15px;
-			background-color: #007bff;
-			/* Fondo azul */
-			color: white;
-			border: none;
-			border-radius: 50%;
-			/* Botón redondo */
-			width: 35px;
-			height: 35px;
-			font-size: 1em;
-			cursor: pointer;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-			transition: background-color 0.3s ease, transform 0.2s ease;
-		}
-
-		#dark-mode-toggle:hover {
-			background-color: #0056b3;
-			/* Azul más oscuro en hover */
-			transform: scale(1.05);
-		}
-
-		body.dark-mode #dark-mode-toggle {
-			background-color: #007bff;
-			/* Mantener azul en modo oscuro */
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-		}
-
-		body.dark-mode #dark-mode-toggle:hover {
-			background-color: #0056b3;
-			/* Mantener azul más oscuro en hover */
-		}
-
-		/* Mensaje de usabilidad para el progreso */
-		.usability-message {
-			font-size: 0.85em;
-			color: #555;
-			margin-top: 20px;
-			text-align: center;
-		}
-
-		body.dark-mode .usability-message {
-			color: #b0b0b0;
-			/* Gris claro */
-		}
-
-		/* Contenedor para el historial de sesiones */
-		.session-history-container {
-			margin-top: 30px;
-			padding-top: 20px;
-			border-top: 1px solid #eee;
-			text-align: left;
-		}
-
-		body.dark-mode .session-history-container {
-			border-top-color: #424242;
-		}
-
-		.session-history-container h3 {
-			font-size: 1.2em;
-			font-weight: bold;
-			margin-bottom: 15px;
-			color: #007bff;
-			text-align: center;
-		}
-
-		body.dark-mode .session-history-container h3 {
-			color: #007bff;
-			/* Azul */
-		}
-
-		.session-item {
-			margin-bottom: 15px;
-			padding: 15px;
-			background-color: #f9f9f9;
-			border-radius: 8px;
-			border: 1px solid #eee;
-		}
-
-		body.dark-mode .session-item {
-			background-color: #2d2d2d;
-			border-color: #424242;
-		}
-
-		.session-item p {
-			margin-bottom: 5px;
-			color: #333;
-		}
-
-		body.dark-mode .session-item p {
-			color: #e0e0e0;
-			/* Texto claro */
-		}
-
-		.session-item .score-detail {
-			font-size: 0.95em;
-			color: #555;
-		}
-
-		body.dark-mode .session-item .score-detail {
-			color: #b0b0b0;
-			/* Gris claro */
-		}
-
-		/* Estilos para el área del gráfico */
-		.progress-chart-container {
-			margin-top: 30px;
-			padding-top: 20px;
-			border-top: 1px solid #eee;
-			text-align: center;
-		}
-
-		body.dark-mode .progress-chart-container {
-			border-top-color: #424242;
-		}
-
-		.progress-chart-container h3 {
-			font-size: 1.2em;
-			font-weight: bold;
-			margin-bottom: 15px;
-			color: #007bff;
-		}
-
-		body.dark-mode .progress-chart-container h3 {
-			color: #007bff;
-			/* Azul */
-		}
-
-		.progress-chart-container svg {
-			background-color: #f9f9f9;
-			/* Fondo claro para el gráfico */
-			border-radius: 8px;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-		}
-
-		body.dark-mode .progress-chart-container svg {
-			background-color: #2d2d2d;
-			/* Fondo oscuro para el gráfico */
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-		}
-
-		.progress-chart-container .axis text {
-			font-size: 0.8em;
-			fill: #333;
-			/* Color de texto del eje */
-		}
-
-		body.dark-mode .progress-chart-container .axis text {
-			fill: #e0e0e0;
-			/* Color de texto del eje en modo oscuro */
-		}
-
-		.progress-chart-container .axis path,
-		.progress-chart-container .axis line {
-			stroke: #888;
-			/* Color de las líneas del eje */
-		}
-
-		body.dark-mode .progress-chart-container .axis path,
-		body.dark-mode .progress-chart-container .axis line {
-			stroke: #b0b0b0;
-			/* Color de las líneas del eje en modo oscuro */
-		}
-
-		.progress-chart-container .correct-bar {
-			fill: #4caf50;
-			/* Verde para barras correctas */
-		}
-
-		.progress-chart-container .incorrect-bar {
-			fill: #ff9800;
-			/* Naranja para barras incorrectas */
-		}
-
-		.progress-chart-container .tooltip {
-			position: absolute;
-			text-align: center;
-			padding: 8px;
-			font: 12px sans-serif;
-			background: lightsteelblue;
-			border: 0px;
-			border-radius: 8px;
-			pointer-events: none;
-			color: #333;
+			/* Color de texto para la explicación */
 		}
 	</style>
 </head>
@@ -657,10 +355,10 @@
 <body>
 
 	<div class="quiz-container">
-		<button id="dark-mode-toggle">🌙</button>
-		<h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Quiz: R, R Markdown, Quarto y Shiny</h1>
+		<h1 class="text-2xl font-bold mb-6 text-center text-gray-800">EntrenaR: Preguntas y respuestas sobre trabajo con
+			R</h1>
 
-		<div class="timer" id="timer-area">Tiempo restante: 60s</div>
+		<div class="timer" id="timer-area">Tiempo restante: 120s</div>
 
 		<div id="quiz-content">
 			<div id="question-area">
@@ -682,22 +380,6 @@
 		<div id="end-screen" class="hidden">
 			<button id="restart-quiz" class="button hidden">Reiniciar prueba</button>
 		</div>
-
-		<div class="session-history-container">
-			<h3 id="session-history-title">Historial de Sesión</h3>
-			<div id="session-history-list">
-			</div>
-			<button id="clear-history-button" class="button">Borrar Historial</button>
-			<p class="usability-message">Tu progreso se guarda en tu navegador hasta que borres el historial o uses otro
-				dispositivo.</p>
-		</div>
-
-		<div class="progress-chart-container hidden">
-			<h3>Progreso de Intentos</h3>
-			<div id="progress-chart">
-			</div>
-		</div>
-
 
 	</div>
 
@@ -821,7 +503,7 @@
 		let currentQuestionIndex = 0; // Índice de la pregunta actual
 		let score = 0; // Puntaje del usuario (solo correctas)
 		let timerInterval; // Variable para almacenar el intervalo del temporizador
-		const TOTAL_QUIZ_TIME = 60; // Tiempo total en segundos para todo el quiz
+		const TOTAL_QUIZ_TIME = 120; // Tiempo total en segundos para todo el quiz
 		let timeLeft = TOTAL_QUIZ_TIME; // Tiempo restante total del quiz
 		let quizActive = true; // Bandera para saber si el quiz está activo
 
@@ -839,11 +521,6 @@
 		let quizContentElement;
 		let endScreenElement;
 		let scoreContainerElement; // Contenedor de los botones de puntaje
-		let darkModeToggle; // Botón de modo oscuro
-		let sessionHistoryList; // Lista para el historial de sesiones
-		let clearHistoryButton; // Botón para borrar historial
-		let progressChartContainer; // Contenedor del gráfico de progreso
-		let progressChartElement; // Elemento donde se dibuja el gráfico
 
 
 		// Función para mezclar un array (Algoritmo Fisher-Yates (Knuth) Shuffle)
@@ -903,10 +580,7 @@
 			endScreenElement.classList.add('hidden');
 			timerAreaElement.classList.remove('hidden'); // Asegurarse de que el temporizador sea visible
 			scoreContainerElement.classList.remove('hidden'); // Asegurarse de que el contenedor de puntaje sea visible
-			progressChartContainer.classList.add('hidden'); // Ocultar el gráfico de progreso
 
-			// Habilitar las opciones de respuesta al cargar una nueva pregunta
-			enableOptions();
 
 			// Obtener la pregunta actual del array de preguntas aleatorizadas
 			const currentQuestion = shuffledQuizData[currentQuestionIndex];
@@ -963,17 +637,9 @@
 
 		// Función para deshabilitar las opciones de respuesta
 		function disableOptions() {
-			const options = optionsAreaElement.querySelectorAll('input[name="answer"]');
+			const options = optionsAreaElement.querySelectorAll('input[type="radio"]');
 			options.forEach(option => {
 				option.disabled = true;
-			});
-		}
-
-		// Función para habilitar las opciones de respuesta
-		function enableOptions() {
-			const options = optionsAreaElement.querySelectorAll('input[name="answer"]');
-			options.forEach(option => {
-				option.disabled = false;
 			});
 		}
 
@@ -985,21 +651,14 @@
 			// Obtener la opción seleccionada por el usuario
 			const selectedOption = document.querySelector('input[name="answer"]:checked');
 
-			// Si no se seleccionó ninguna opción, mostrar un mensaje y no continuar
-			if (!selectedOption) {
-				feedbackAreaElement.classList.remove('hidden');
-				feedbackAreaElement.classList.remove('correct', 'incorrect'); // Limpiar clases
-				feedbackAreaElement.classList.add('warning'); // Usar la clase warning para este tipo de mensaje
-				feedbackAreaElement.innerHTML = '<strong>Por favor, selecciona una opción antes de responder.</strong>';
-				return; // Salir de la función si no hay selección
-			}
-
 			// Deshabilitar el botón de responder para evitar múltiples envíos
 			submitButton.disabled = true;
 			disableOptions(); // Deshabilitar opciones después de responder
 
-			let userAnswer = selectedOption.value;
-
+			let userAnswer = null;
+			if (selectedOption) {
+				userAnswer = selectedOption.value;
+			}
 
 			// Obtener la respuesta correcta de la pregunta actual (del array mezclado)
 			const correctAnswer = shuffledQuizData[currentQuestionIndex].correctAnswer;
@@ -1058,13 +717,7 @@
 
 		// Función para actualizar la visualización del puntaje
 		function updateScoreDisplay() {
-			// currentQuestionIndex es el número de preguntas que ya se han mostrado.
-			// Si el botón "Responder" está visible, significa que la pregunta actual aún no se ha respondido,
-			// por lo que el número de intentadas es igual al índice actual.
-			// Si el botón "Siguiente Pregunta" está visible, significa que la pregunta actual ya se respondió,
-			// por lo que el número de intentadas es el índice actual + 1.
-			const attempted = currentQuestionIndex + (nextButton.classList.contains('hidden') ? 0 : 1);
-
+			const attempted = currentQuestionIndex + (quizActive && !submitButton.classList.contains('hidden') && document.querySelector('input[name="answer"]:checked') ? 1 : 0); // Contar la pregunta actual si se ha respondido
 			const correct = score;
 			const incorrect = attempted - correct;
 
@@ -1097,7 +750,7 @@
 			if (timeRanOut) {
 				endTitle.textContent = '¡Tiempo agotado!';
 			} else {
-				endTitle.textContent = '¡Quiz Finalizado!';
+				endTitle.textContent = '¡Entrenamiento Finalizado!';
 			}
 
 			// Calcular el puntaje final detallado
@@ -1157,7 +810,8 @@
 			summarySection.appendChild(summaryTitle);
 
 			// Iterar solo sobre las preguntas que fueron presentadas en este quiz
-			// currentQuestionIndex es el número de preguntas que se intentaron/vieron
+			// currentQuestionIndex es el índice de la *siguiente* pregunta a mostrar,
+			// por lo que iteramos desde 0 hasta currentQuestionIndex - 1.
 			for (let i = 0; i < currentQuestionIndex; i++) {
 				const questionData = shuffledQuizData[i]; // Obtener la pregunta del array mezclado
 
@@ -1193,203 +847,7 @@
 
 			// Asegurarse de que el área de puntaje principal esté oculta al mostrar el puntaje final en la pantalla final
 			// scoreAreaElement.classList.add('hidden'); // Esto ya no es necesario ya que ocultamos scoreContainerElement
-
-			// Guardar el resultado de la sesión en localStorage
-			saveSessionResult({
-				attempted: totalAttempted,
-				correct: finalCorrect,
-				incorrect: finalIncorrect,
-				timestamp: new Date().toISOString() // Opcional: guardar la hora del intento
-			});
-
-			// Enviar datos al backend (solo esqueleto)
-			sendResultToBackend({
-				attempted: totalAttempted,
-				correct: finalCorrect,
-				incorrect: finalIncorrect,
-				timestamp: new Date().toISOString(),
-				quizId: 'r_markdown_shiny_quiz' // Identificador del quiz
-			});
-
-			// Mostrar el gráfico de progreso al finalizar el quiz
-			progressChartContainer.classList.remove('hidden');
-			drawProgressChart(); // Dibujar el gráfico con los datos actualizados
 		}
-
-		// Función para guardar el resultado de la sesión en localStorage
-		function saveSessionResult(result) {
-			const results = JSON.parse(localStorage.getItem('quizResults') || '[]');
-			results.push(result);
-			localStorage.setItem('quizResults', JSON.stringify(results));
-			displaySessionHistory(); // Actualizar la visualización del historial
-		}
-
-		// Función para cargar y mostrar el historial de sesiones
-		function displaySessionHistory() {
-			const results = JSON.parse(localStorage.getItem('quizResults') || '[]');
-			sessionHistoryList.innerHTML = ''; // Limpiar la lista actual
-
-			if (results.length === 0) {
-				sessionHistoryList.innerHTML = '<p class="text-center text-gray-500">Aún no hay intentos en esta sesión.</p>';
-				// Ocultar el gráfico si no hay historial
-				progressChartContainer.classList.add('hidden');
-				return;
-			}
-
-			results.forEach((result, index) => {
-				const sessionItem = document.createElement('div');
-				sessionItem.classList.add('session-item');
-				sessionItem.innerHTML = `
-                     <p><strong>Intento ${index + 1}:</strong></p>
-                     <p class="score-detail">Intentadas: ${result.attempted}, Correctas: ${result.correct}, Incorrectas: ${result.incorrect}</p>
-                     ${result.timestamp ? `<p class="score-detail">Hora: ${new Date(result.timestamp).toLocaleString()}</p>` : ''}
-                 `;
-				sessionHistoryList.appendChild(sessionItem);
-			});
-
-			// Mostrar el gráfico si hay historial
-			progressChartContainer.classList.remove('hidden');
-			drawProgressChart(); // Dibujar el gráfico con los datos del historial
-		}
-
-		// Función para borrar el historial de sesiones
-		function clearSessionHistory() {
-			localStorage.removeItem('quizResults');
-			displaySessionHistory(); // Actualizar la visualización (mostrará el mensaje de "Aún no hay intentos")
-		}
-
-
-		// Función placeholder para enviar datos al backend
-		function sendResultToBackend(resultData) {
-			// ** ESTO ES SOLO UN ESQUELETO **
-			// Para que esto funcione, necesitas un servidor backend configurado
-			// para recibir peticiones POST en la URL especificada.
-			const backendUrl = 'TU_URL_DEL_BACKEND_PARA_GUARDAR_RESULTADOS'; // <<< Reemplaza con tu URL real
-
-			console.log('Intentando enviar datos al backend:', resultData); // Log para depuración
-
-			// Descomenta el siguiente bloque para intentar enviar datos (requiere backend)
-			/*
-			fetch(backendUrl, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(resultData),
-			})
-			.then(response => {
-				if (!response.ok) {
-					console.error('Error al enviar datos al backend:', response.statusText);
-				}
-				return response.json();
-			})
-			.then(data => {
-				console.log('Respuesta del backend:', data);
-			})
-			.catch((error) => {
-				console.error('Error en la conexión con el backend:', error);
-			});
-			*/
-		}
-
-		// Función para dibujar el gráfico de progreso usando D3.js
-		function drawProgressChart() {
-			const results = JSON.parse(localStorage.getItem('quizResults') || '[]');
-			progressChartElement.innerHTML = ''; // Limpiar el área del gráfico anterior
-
-			if (results.length === 0) {
-				// No dibujar gráfico si no hay datos
-				return;
-			}
-
-			const data = results.map((r, i) => ({
-				attempt: i + 1,
-				correct: r.correct,
-				incorrect: r.incorrect
-			}));
-
-			const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-			const width = 600 - margin.left - margin.right;
-			const height = 300 - margin.top - margin.bottom;
-
-			// Seleccionar el contenedor y añadir el SVG
-			const svg = d3.select("#progress-chart").append("svg")
-				.attr("width", "100%") // Usar ancho relativo
-				.attr("height", height + margin.top + margin.bottom)
-				.attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`) // Añadir viewBox para responsividad
-				.attr("preserveAspectRatio", "xMidYMid meet") // Mantener aspecto
-				.append("g")
-				.attr("transform", `translate(${margin.left},${margin.top})`);
-
-			// Escalas
-			const xScale = d3.scaleBand()
-				.range([0, width])
-				.padding(0.1)
-				.domain(data.map(d => d.attempt)); // Dominio aquí
-
-			const yScale = d3.scaleLinear()
-				.range([height, 0])
-				.domain([0, d3.max(data, d => d.correct + d.incorrect)]); // El eje Y va hasta el total de intentadas
-
-			// Añadir ejes
-			svg.append("g")
-				.attr("class", "axis axis--x")
-				.attr("transform", `translate(0,${height})`)
-				.call(d3.axisBottom(xScale));
-
-			svg.append("g")
-				.attr("class", "axis axis--y")
-				.call(d3.axisLeft(yScale));
-
-			// Crear grupos para las barras (correctas e incorrectas apiladas)
-			const attempts = svg.selectAll(".attempt")
-				.data(data)
-				.enter().append("g")
-				.attr("class", "attempt")
-				.attr("transform", d => `translate(${xScale(d.attempt)},0)`);
-
-			// Barras incorrectas (base)
-			attempts.append("rect")
-				.attr("class", "incorrect-bar")
-				.attr("y", d => yScale(d.incorrect))
-				.attr("height", d => height - yScale(d.incorrect))
-				.attr("width", xScale.bandwidth());
-
-			// Barras correctas (encima de las incorrectas)
-			attempts.append("rect")
-				.attr("class", "correct-bar")
-				.attr("y", d => yScale(d.incorrect + d.correct)) // La parte superior de la barra correcta es la suma
-				.attr("height", d => height - yScale(d.correct)) // La altura es solo las correctas
-				.attr("width", xScale.bandwidth());
-
-			// Opcional: Añadir tooltips para mostrar detalles al pasar el ratón
-			// Seleccionar el tooltip fuera de los event listeners para mayor robustez
-			const tooltip = d3.select("body").select(".tooltip"); // Seleccionar el tooltip existente
-
-			attempts.on("mouseover", (event, d) => {
-				// Asegurarse de que el tooltip existe antes de manipularlo
-				if (!tooltip.empty()) {
-					tooltip.classed('hidden', false) // Usar classed para alternar clases
-						.html(`Intento: ${d.attempt}<br>Correctas: ${d.correct}<br>Incorrectas: ${d.incorrect}`)
-						.style("left", (event.pageX + 10) + "px")
-						.style("top", (event.pageY - 20) + "px");
-				}
-			})
-				.on("mouseout", () => {
-					// Asegurarse de que el tooltip existe antes de manipularlo
-					if (!tooltip.empty()) {
-						tooltip.classed('hidden', true); // Usar classed para alternar clases
-					}
-				});
-
-			// Ajustar el tamaño del SVG para que sea responsivo (básico)
-			// No es necesario redibujar todo en redimensionamiento si se usa viewBox y preserveAspectRatio
-			// d3.select(window).on('resize', () => {
-			//     drawProgressChart();
-			// });
-		}
-
-
 
 		// Función para reiniciar el quiz
 		function restartQuiz() {
@@ -1415,22 +873,6 @@
 			quizContentElement.classList.remove('hidden');
 			// Asegurarse de que el contenedor de puntaje principal sea visible
 			scoreContainerElement.classList.remove('hidden');
-			progressChartContainer.classList.add('hidden'); // Ocultar el gráfico al reiniciar
-		}
-
-		// Función para alternar el modo oscuro
-		function toggleDarkMode() {
-			document.body.classList.toggle('dark-mode');
-			// Opcional: guardar la preferencia en localStorage para que persista
-			if (document.body.classList.contains('dark-mode')) {
-				localStorage.setItem('darkMode', 'enabled');
-			} else {
-				localStorage.setItem('darkMode', 'disabled');
-			}
-			// Redibujar el gráfico para aplicar estilos de modo oscuro si está visible
-			if (!progressChartContainer.classList.contains('hidden')) {
-				drawProgressChart();
-			}
 		}
 
 
@@ -1447,12 +889,6 @@
 			timerAreaElement = document.getElementById('timer-area');
 			quizContentElement = document.getElementById('quiz-content');
 			endScreenElement = document.getElementById('end-screen');
-			darkModeToggle = document.getElementById('dark-mode-toggle'); // Referencia al botón de modo oscuro
-			sessionHistoryList = document.getElementById('session-history-list'); // Referencia a la lista del historial
-			clearHistoryButton = document.getElementById('clear-history-button'); // Referencia al botón de borrar historial
-			progressChartContainer = document.querySelector('.progress-chart-container'); // Referencia al contenedor del gráfico
-			progressChartElement = document.getElementById('progress-chart'); // Referencia al elemento donde dibujar el gráfico
-
 
 			// Crear los elementos para los botones de puntaje
 			scoreAttemptedButton = document.createElement('span');
@@ -1467,27 +903,11 @@
 			scoreIncorrectButton.classList.add('score-button', 'incorrect');
 			scoreContainerElement.appendChild(scoreIncorrectButton);
 
-			// Crear el elemento tooltip de D3 una vez al cargar la página
-			d3.select("body").append("div")
-				.attr("class", "tooltip hidden");
-
 
 			// Event listeners para los botones - ¡Ahora dentro de window.onload!
 			submitButton.addEventListener('click', checkAnswer);
 			nextButton.addEventListener('click', nextQuestion);
 			restartButton.addEventListener('click', restartQuiz); // Event listener para el botón de reiniciar
-			darkModeToggle.addEventListener('click', toggleDarkMode); // Event listener para el botón de modo oscuro
-			clearHistoryButton.addEventListener('click', clearSessionHistory); // Event listener para borrar historial
-
-
-			// Cargar la preferencia de modo oscuro guardada (si existe)
-			if (localStorage.getItem('darkMode') === 'enabled') {
-				document.body.classList.add('dark-mode');
-			}
-
-			// Cargar y mostrar el historial de sesiones al cargar la página
-			displaySessionHistory();
-
 
 			// Mezclar las preguntas al cargar la página por primera vez
 			shuffledQuizData = shuffleArray([...originalQuizData]); // Usar una copia del array original
