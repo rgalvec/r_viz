@@ -271,6 +271,53 @@
 			font-size: 1.1em;
 			color: #333;
 		}
+
+		.summary-section {
+			margin-top: 30px;
+			padding-top: 20px;
+			border-top: 1px solid #eee;
+			/* Línea separadora */
+			text-align: left;
+			/* Alinear resumen a la izquierda */
+		}
+
+		.summary-section h3 {
+			font-size: 1.2em;
+			font-weight: bold;
+			margin-bottom: 15px;
+			color: #007bff;
+			/* Azul para el título del resumen */
+			text-align: center;
+			/* Centrar título del resumen */
+		}
+
+		.summary-item {
+			margin-bottom: 20px;
+			padding: 15px;
+			background-color: #f9f9f9;
+			/* Fondo ligeramente gris para cada item */
+			border-radius: 8px;
+			border: 1px solid #eee;
+		}
+
+		.summary-item strong {
+			color: #333;
+			/* Color oscuro para el texto de la pregunta */
+		}
+
+		.summary-item .correct-answer {
+			margin-top: 5px;
+			font-weight: bold;
+			color: #155724;
+			/* Verde oscuro para la respuesta correcta */
+		}
+
+		.summary-item .explanation {
+			margin-top: 5px;
+			font-size: 0.9em;
+			color: #555;
+			/* Color de texto para la explicación */
+		}
 	</style>
 </head>
 
@@ -678,7 +725,7 @@
 
 			const finalScoreDisplay = document.createElement('p');
 			finalScoreDisplay.classList.add('score', 'text-center', 'mt-4');
-			finalScoreDisplay.textContent = `Tu puntaje final es: ${score} de ${quizData.length}`; // Mostrar puntaje sobre el total original
+			finalScoreDisplay.textContent = `Tu puntaje final es: ${score} de ${originalQuizData.length}`; // Mostrar puntaje sobre el total original
 
 
 			// Limpiar el contenido anterior de la pantalla final y añadir los nuevos elementos
@@ -686,6 +733,46 @@
 			endScreenElement.appendChild(endTitle);
 			endScreenElement.appendChild(finalScoreDisplay); // Añadir el puntaje final
 			endScreenElement.appendChild(scoreMessageElement); // Añadir el mensaje basado en el puntaje
+
+			// --- Agregar la sección de resumen de preguntas respondidas ---
+			const summarySection = document.createElement('div');
+			summarySection.classList.add('summary-section');
+
+			const summaryTitle = document.createElement('h3');
+			summaryTitle.textContent = 'Resumen de Preguntas Respondidas';
+			summarySection.appendChild(summaryTitle);
+
+			// Iterar solo sobre las preguntas que fueron presentadas en este quiz
+			// currentQuestionIndex es el índice de la *siguiente* pregunta a mostrar,
+			// por lo que iteramos desde 0 hasta currentQuestionIndex - 1.
+			for (let i = 0; i < currentQuestionIndex; i++) {
+				const questionData = shuffledQuizData[i]; // Obtener la pregunta del array mezclado
+
+				const summaryItem = document.createElement('div');
+				summaryItem.classList.add('summary-item');
+
+				const questionText = document.createElement('p');
+				questionText.innerHTML = `<strong>Pregunta ${i + 1}:</strong> ${questionData.question}`; // Usar i+1 para el número de pregunta en el resumen
+				summaryItem.appendChild(questionText);
+
+				const correctAnswer = document.createElement('p');
+				// Encontrar el texto de la respuesta correcta usando la clave
+				const correctAnswerText = questionData.options[questionData.correctAnswer];
+				correctAnswer.innerHTML = `<span class="correct-answer">Respuesta Correcta: ${questionData.correctAnswer}) ${correctAnswerText}</span>`;
+				summaryItem.appendChild(correctAnswer);
+
+				const explanation = document.createElement('p');
+				explanation.classList.add('explanation');
+				explanation.textContent = `Explicación: ${questionData.explanation}`;
+				summaryItem.appendChild(explanation);
+
+				summarySection.appendChild(summaryItem);
+			}
+
+
+			endScreenElement.appendChild(summarySection); // Añadir la sección de resumen a la pantalla final
+			// --- Fin de la sección de resumen ---
+
 
 			// Mostrar el botón de reiniciar
 			restartButton.classList.remove('hidden');
