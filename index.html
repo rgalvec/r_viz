@@ -31,6 +31,8 @@
 			max-width: 700px;
 			/* Ancho máximo */
 			width: 100%;
+			text-align: center;
+			/* Centrar contenido */
 		}
 
 		.question {
@@ -39,6 +41,13 @@
 			font-weight: bold;
 			color: #333;
 			/* Color de texto oscuro para la pregunta */
+			text-align: left;
+			/* Alinear texto de pregunta a la izquierda */
+		}
+
+		.options {
+			text-align: left;
+			/* Alinear opciones a la izquierda */
 		}
 
 		.options label {
@@ -146,6 +155,8 @@
 			margin-top: 20px;
 			padding: 15px;
 			border-radius: 8px;
+			text-align: left;
+			/* Alinear feedback a la izquierda */
 		}
 
 		.feedback.correct {
@@ -204,18 +215,26 @@
 			/* Fondo azul */
 			color: #ffffff;
 			/* Letras blancas */
-			border: none;
-			/* Sin borde */
+			border: 2px solid #0056b3;
+			/* Añadir un borde azul más oscuro */
 			cursor: pointer;
+			text-decoration: none;
+			/* Asegurarse de que no se vea como enlace */
+			padding: 10px 20px;
+			/* Ajustar padding para que se vea más como botón */
 		}
 
 		.button:disabled {
 			@apply bg-gray-400 hover:bg-gray-400 cursor-not-allowed;
+			border-color: #6b7280;
+			/* Borde gris para botón deshabilitado */
 		}
 
 		.button:hover:not(:disabled) {
 			background-color: #0056b3;
 			/* Azul más oscuro en hover */
+			border-color: #003f80;
+			/* Borde aún más oscuro en hover */
 		}
 
 		/* Estilo para el mensaje final del quiz */
@@ -228,6 +247,30 @@
 			color: #ff9800;
 			/* Naranja para el puntaje final */
 		}
+
+		.timer {
+			font-size: 1.5em;
+			/* Aumentar tamaño de fuente */
+			font-weight: bold;
+			color: #ff9800;
+			/* Naranja para el temporizador */
+			margin-bottom: 15px;
+			padding: 10px;
+			/* Añadir padding */
+			border: 2px solid #ff9800;
+			/* Borde naranja */
+			border-radius: 8px;
+			/* Bordes redondeados */
+			display: inline-block;
+			/* Para que el borde se ajuste al contenido */
+		}
+
+		.end-message {
+			margin-top: 20px;
+			margin-bottom: 20px;
+			font-size: 1.1em;
+			color: #333;
+		}
 	</style>
 </head>
 
@@ -236,21 +279,30 @@
 	<div class="quiz-container">
 		<h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Quiz: R, R Markdown, Quarto y Shiny</h1>
 
-		<div id="question-area">
-			<div class="question" id="question-text"></div>
-			<div class="options" id="options-area">
+		<div class="timer" id="timer-area">Tiempo restante: 60s</div>
+
+		<div id="quiz-content">
+			<div id="question-area">
+				<div class="question" id="question-text"></div>
+				<div class="options" id="options-area">
+				</div>
 			</div>
-		</div>
 
-		<button id="submit-answer" class="button">Responder</button>
-		<button id="next-question" class="button hidden">Siguiente Pregunta</button>
+			<button id="submit-answer" class="button">Responder</button>
+			<button id="next-question" class="button hidden">Siguiente pregunta</button>
 
-		<div id="feedback-area" class="feedback hidden">
+			<div id="feedback-area" class="feedback hidden">
+			</div>
 		</div>
 
 		<div class="score" id="score-area">
 			Puntaje: 0 / 0
 		</div>
+
+		<div id="end-screen" class="hidden">
+			<button id="restart-quiz" class="button hidden">Reiniciar prueba</button>
+		</div>
+
 	</div>
 
 	<script>
@@ -280,7 +332,7 @@
 				explanation: "El botón Outline muestra un esquema navegable del documento, construido a partir de los encabezados formateados con Markdown. Se activa simplemente haciendo clic en el botón correspondiente en la interfaz del editor, facilitando la navegación y comprensión de la estructura."
 			},
 			{
-				question: "Describe la función de los botones 'Source' y 'Visual' en el editor de R Markdown o Quarto.",
+				question: "Describe la función de los botones 'Source' y 'Visual' en el editor.",
 				options: {
 					A: "'Source' es para ver el código R y 'Visual' es para ver los gráficos generados.",
 					B: "'Source' es para editar archivos de datos y 'Visual' es para editar el texto.",
@@ -291,7 +343,7 @@
 				explanation: "Los botones Source y Visual son fundamentales para la edición, permitiendo alternar fácilmente entre la manipulación directa del código fuente Markdown y una vista más visual y amigable (WYSIWYG), adaptándose a diferentes preferencias de edición."
 			},
 			{
-				question: "¿Cómo se genera un documento final (renderizado) en R Markdown o Quarto, y qué opciones de formato de salida son comunes?",
+				question: "¿Cómo se genera un documento final (renderizado) en R Markdown o Quarto, y qué opciones de formato de salida existen?",
 				options: {
 					A: "Se utiliza el comando render() en la consola de R; solo se puede generar HTML por defecto.",
 					B: "Se guarda el archivo y se utiliza el botón 'Knit' o 'Render'; solo se pueden generar PDF y Word.",
@@ -302,7 +354,7 @@
 				explanation: "Para generar el documento final, se guarda el archivo y se usa el icono de renderizado. El triángulo junto a él permite elegir formatos de salida como HTML, PDF o Word, siempre que estén definidos en el encabezado YAML. Es importante recordar que PDF requiere la instalación de LaTeX."
 			},
 			{
-				question: "¿Qué es un 'chunk' en R Markdown o Quarto y cuál es su propósito principal?",
+				question: "¿Qué es un chunk en R Markdown o Quarto y cuál es su propósito principal?",
 				options: {
 					A: "Es una sección de texto narrativo con formato especial.",
 					B: "Es un bloque de configuración inicial del documento (YAML).",
@@ -313,7 +365,7 @@
 				explanation: "Un chunk es la parte central de la reproducibilidad: un bloque de código R (u otro lenguaje en Quarto) delimitado por ```{r} y ``` que se ejecuta durante el renderizado para incluir los resultados (código, texto, tablas, gráficos) directamente en el documento final."
 			},
 			{
-				question: "Menciona dos formas comunes de insertar un nuevo chunk de código en el editor de R Markdown o Quarto.",
+				question: "Menciona dos formas de insertar un nuevo chunk de código en el editor.",
 				options: {
 					A: "Copiar y pegar un chunk existente; usar el menú 'Edit'.",
 					B: "Escribir manualmente los delimitadores ``` y {r}; usar la consola de R.",
@@ -335,7 +387,7 @@
 				explanation: "La distinción es crucial para controlar qué se muestra en el documento. echo: false es útil cuando quieres mostrar solo el resultado de un cálculo o gráfico sin el código que lo generó. include: false oculta todo del chunk, útil para código que genera objetos que se usan más adelante pero no necesitas mostrar."
 			},
 			{
-				question: "¿Cuál es la función principal del paquete Shiny y cuándo se lanzó aproximadamente su primera versión beta pública?",
+				question: "¿Cuál es la función principal del paquete Shiny y cuándo se lanzó su primera versión beta pública?",
 				options: {
 					A: "Es un paquete para crear informes estáticos y publicarlos en RPubs; lanzado en 2010.",
 					B: "Es un paquete para limpiar y transformar datos de manera eficiente; lanzado en 2015.",
@@ -346,7 +398,7 @@
 				explanation: "Shiny revolucionó la capacidad de los usuarios de R para compartir resultados, permitiendo construir potentes aplicaciones web interactivas y dashboards sin necesidad de conocimientos avanzados de desarrollo web. Su lanzamiento beta en 2013 marcó un hito importante."
 			},
 			{
-				question: "Describe brevemente la separación fundamental entre las capas UI (interfaz de usuario) y Server en una aplicación Shiny.",
+				question: "Describe brevemente la separación entre las capas UI (interfaz de usuario) y Server en una aplicación Shiny.",
 				options: {
 					A: "La capa UI contiene el código R, y la capa Server define el diseño visual.",
 					B: "La capa UI maneja la lógica de base de datos, y la capa Server maneja la visualización.",
@@ -371,22 +423,60 @@
 
 		let currentQuestionIndex = 0; // Índice de la pregunta actual
 		let score = 0; // Puntaje del usuario
+		let timerInterval; // Variable para almacenar el intervalo del temporizador
+		const TOTAL_QUIZ_TIME = 60; // Tiempo total en segundos para todo el quiz
+		let timeLeft = TOTAL_QUIZ_TIME; // Tiempo restante total del quiz
+		let quizActive = true; // Bandera para saber si el quiz está activo
 
-		// Obtener referencias a los elementos del DOM
-		const questionTextElement = document.getElementById('question-text');
-		const optionsAreaElement = document.getElementById('options-area');
-		const submitButton = document.getElementById('submit-answer');
-		const nextButton = document.getElementById('next-question');
-		const feedbackAreaElement = document.getElementById('feedback-area');
-		const scoreAreaElement = document.getElementById('score-area');
+		// Obtener referencias a los elementos del DOM - ¡Ahora dentro de window.onload!
+		let questionTextElement;
+		let optionsAreaElement;
+		let submitButton;
+		let nextButton;
+		let restartButton;
+		let feedbackAreaElement;
+		let scoreAreaElement;
+		let timerAreaElement;
+		let quizContentElement;
+		let endScreenElement;
+
+
+		// Función para iniciar el temporizador global del quiz
+		function startGlobalTimer() {
+			timeLeft = TOTAL_QUIZ_TIME; // Reiniciar tiempo total
+			timerAreaElement.textContent = `Tiempo restante: ${timeLeft}s`; // Mostrar tiempo inicial
+
+			timerInterval = setInterval(() => {
+				timeLeft--;
+				timerAreaElement.textContent = `Tiempo restante: ${timeLeft}s`;
+
+				if (timeLeft <= 0) {
+					clearInterval(timerInterval); // Detener el temporizador
+					endQuiz(true); // Finalizar el quiz porque el tiempo se agotó
+				}
+			}, 1000); // Actualizar cada 1 segundo
+		}
+
+		// Función para detener el temporizador
+		function stopTimer() {
+			clearInterval(timerInterval);
+		}
 
 		// Función para cargar y mostrar la pregunta actual
 		function loadQuestion() {
+			if (!quizActive) return; // No cargar pregunta si el quiz no está activo
+
 			// Limpiar área de opciones y feedback
 			optionsAreaElement.innerHTML = '';
 			feedbackAreaElement.innerHTML = '';
 			feedbackAreaElement.classList.add('hidden'); // Ocultar feedback
 			feedbackAreaElement.classList.remove('correct', 'incorrect', 'warning'); // Limpiar clases de feedback
+
+			// Asegurarse de que el contenido del quiz esté visible y la pantalla final oculta
+			quizContentElement.classList.remove('hidden');
+			endScreenElement.classList.add('hidden');
+			timerAreaElement.classList.remove('hidden'); // Asegurarse de que el temporizador sea visible
+
 
 			// Obtener la pregunta actual del array quizData
 			const currentQuestion = quizData[currentQuestionIndex];
@@ -428,71 +518,92 @@
 			// Habilitar el botón de responder
 			submitButton.disabled = false;
 
-			// Actualizar el puntaje mostrado
+			// Actualizar el puntaje mostrado (puntaje actual / total de preguntas)
 			updateScoreDisplay();
+
+			// Deshabilitar opciones si el tiempo se agotó (aunque endQuiz debería manejar esto)
+			if (timeLeft <= 0) {
+				disableOptions();
+				submitButton.disabled = true;
+			}
 		}
+
+		// Función para deshabilitar las opciones de respuesta
+		function disableOptions() {
+			const options = optionsAreaElement.querySelectorAll('input[type="radio"]');
+			options.forEach(option => {
+				option.disabled = true;
+			});
+		}
+
 
 		// Función para verificar la respuesta seleccionada
 		function checkAnswer() {
+			if (!quizActive) return; // No procesar respuesta si el quiz no está activo
+
 			// Obtener la opción seleccionada por el usuario
 			const selectedOption = document.querySelector('input[name="answer"]:checked');
 
 			// Deshabilitar el botón de responder para evitar múltiples envíos
 			submitButton.disabled = true;
+			disableOptions(); // Deshabilitar opciones después de responder
 
-			// Verificar si se seleccionó alguna opción
+			let userAnswer = null;
 			if (selectedOption) {
-				const userAnswer = selectedOption.value;
-				const correctAnswer = quizData[currentQuestionIndex].correctAnswer;
-				const explanation = quizData[currentQuestionIndex].explanation;
-
-				// Mostrar el área de feedback
-				feedbackAreaElement.classList.remove('hidden');
-
-				// Limpiar clases de feedback previas
-				feedbackAreaElement.classList.remove('correct', 'incorrect', 'warning');
-
-				// Comprobar si la respuesta es correcta
-				if (userAnswer === correctAnswer) {
-					score++; // Incrementar puntaje si es correcta
-					feedbackAreaElement.classList.add('correct');
-					feedbackAreaElement.innerHTML = '<strong>¡Correcto!</strong>';
-				} else {
-					feedbackAreaElement.classList.add('incorrect');
-					feedbackAreaElement.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta es ${correctAnswer}.`;
-				}
-
-				// Añadir la explicación al feedback
-				const explanationElement = document.createElement('p');
-				explanationElement.classList.add('explanation');
-				explanationElement.textContent = explanation;
-				feedbackAreaElement.appendChild(explanationElement);
-
-				// Ocultar el botón de responder y mostrar el de siguiente
-				submitButton.classList.add('hidden');
-				nextButton.classList.remove('hidden');
-
-				// Actualizar el puntaje mostrado
-				updateScoreDisplay();
-
-			} else {
-				// Si no se seleccionó ninguna opción, mostrar un mensaje (opcional)
-				feedbackAreaElement.classList.remove('hidden');
-				feedbackAreaElement.classList.add('warning'); // Usar la clase warning para este tipo de mensaje
-				feedbackAreaElement.innerHTML = '<strong>Por favor, selecciona una opción antes de responder.</strong>';
-				submitButton.disabled = false; // Volver a habilitar el botón si no seleccionó nada
+				userAnswer = selectedOption.value;
 			}
+
+			const correctAnswer = quizData[currentQuestionIndex].correctAnswer;
+			const explanation = quizData[currentQuestionIndex].explanation;
+
+			// Mostrar el área de feedback
+			feedbackAreaElement.classList.remove('hidden');
+
+			// Limpiar clases de feedback previas
+			feedbackAreaElement.classList.remove('correct', 'incorrect', 'warning');
+
+			// Comprobar si la respuesta es correcta
+			if (userAnswer === correctAnswer) {
+				score++; // Incrementar puntaje si es correcta
+				feedbackAreaElement.classList.add('correct');
+				feedbackAreaElement.innerHTML = '<strong>¡Correcto!</strong>';
+			} else {
+				feedbackAreaElement.classList.add('incorrect');
+				feedbackAreaElement.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta es ${correctAnswer}.`;
+			}
+
+			// Añadir la explicación al feedback
+			const explanationElement = document.createElement('p');
+			explanationElement.classList.add('explanation');
+			explanationElement.textContent = explanation;
+			feedbackAreaElement.appendChild(explanationElement);
+
+			// Ocultar el botón de responder y mostrar el de siguiente
+			submitButton.classList.add('hidden');
+			// Solo mostrar el botón siguiente si el tiempo no se ha agotado
+			if (timeLeft > 0) {
+				nextButton.classList.remove('hidden');
+			} else {
+				// Si el tiempo se agotó, ir directamente a la pantalla final
+				endQuiz(true);
+			}
+
+
+			// Actualizar el puntaje mostrado
+			updateScoreDisplay();
 		}
 
 		// Función para pasar a la siguiente pregunta o finalizar el quiz
 		function nextQuestion() {
+			if (!quizActive) return; // No pasar de pregunta si el quiz no está activo
+
 			currentQuestionIndex++; // Incrementar el índice de la pregunta
 
-			// Verificar si hay más preguntas
-			if (currentQuestionIndex < quizData.length) {
+			// Verificar si hay más preguntas y si el tiempo no se ha agotado
+			if (currentQuestionIndex < quizData.length && timeLeft > 0) {
 				loadQuestion(); // Cargar la siguiente pregunta
 			} else {
-				endQuiz(); // Finalizar el quiz si no hay más preguntas
+				endQuiz(false); // Finalizar el quiz (ya sea por terminar preguntas o por tiempo agotado)
 			}
 		}
 
@@ -502,34 +613,103 @@
 		}
 
 		// Función para finalizar el quiz
-		function endQuiz() {
-			// Ocultar áreas de pregunta y botones
-			document.getElementById('question-area').classList.add('hidden');
-			submitButton.classList.add('hidden');
-			nextButton.classList.add('hidden');
-			feedbackAreaElement.classList.add('hidden'); // Ocultar feedback final
+		function endQuiz(timeRanOut) {
+			if (!quizActive) return; // Evitar finalizar múltiples veces
+			quizActive = false; // Marcar el quiz como inactivo
 
-			// Mostrar mensaje de fin de quiz y puntaje final
-			const endMessage = document.createElement('h2');
-			endMessage.classList.add('text-xl', 'font-bold', 'text-center', 'text-gray-800');
-			endMessage.textContent = '¡Quiz Finalizado!';
+			// Detener el temporizador final
+			stopTimer();
+			timerAreaElement.classList.add('hidden'); // Ocultar el temporizador al finalizar
 
-			const finalScoreMessage = document.createElement('p');
-			finalScoreMessage.classList.add('score', 'text-center', 'mt-4'); // Usar clases de puntaje y centrar
-			finalScoreMessage.textContent = `Tu puntaje final es: ${score} de ${quizData.length}`;
+			// Ocultar el contenido del quiz
+			quizContentElement.classList.add('hidden');
 
-			const quizContainer = document.querySelector('.quiz-container');
-			quizContainer.innerHTML = ''; // Limpiar contenido anterior
-			quizContainer.appendChild(endMessage);
-			quizContainer.appendChild(finalScoreMessage);
+			// Mostrar la pantalla final
+			endScreenElement.classList.remove('hidden');
+
+			// Mostrar mensaje de fin de quiz
+			const endTitle = document.createElement('h2');
+			endTitle.classList.add('text-xl', 'font-bold', 'text-center', 'text-gray-800', 'mb-4');
+			if (timeRanOut) {
+				endTitle.textContent = '¡Tiempo agotado!';
+			} else {
+				endTitle.textContent = '¡Quiz Finalizado!';
+			}
+
+			// Determinar el mensaje basado en el puntaje
+			let scoreMessageText = "";
+			if (score < 3) {
+				scoreMessageText = "Sigue repasando el contenido, cada intento puedes mejorar.";
+			} else if (score >= 3 && score < 5) {
+				scoreMessageText = "¡Bien! Estás avanzando por el camino de R, sigue repasando.";
+			} else { // score >= 5
+				scoreMessageText = "¡Sigue así! Estás aprendiendo a trabajar con R.";
+			}
+
+			const scoreMessageElement = document.createElement('p');
+			scoreMessageElement.classList.add('end-message', 'text-center');
+			scoreMessageElement.textContent = scoreMessageText;
+
+			const finalScoreDisplay = document.createElement('p');
+			finalScoreDisplay.classList.add('score', 'text-center', 'mt-4');
+			finalScoreDisplay.textContent = `Tu puntaje final es: ${score} de ${quizData.length}`;
+
+
+			// Limpiar el contenido anterior de la pantalla final y añadir los nuevos elementos
+			endScreenElement.innerHTML = '';
+			endScreenElement.appendChild(endTitle);
+			endScreenElement.appendChild(finalScoreDisplay); // Añadir el puntaje final
+			endScreenElement.appendChild(scoreMessageElement); // Añadir el mensaje basado en el puntaje
+
+			// Mostrar el botón de reiniciar
+			restartButton.classList.remove('hidden');
+			endScreenElement.appendChild(restartButton); // Añadir el botón de reiniciar a la pantalla final
+
+			// Asegurarse de que el área de puntaje principal esté oculta al mostrar el puntaje final en la pantalla final
+			scoreAreaElement.classList.add('hidden');
 		}
 
-		// Event listeners para los botones
-		submitButton.addEventListener('click', checkAnswer);
-		nextButton.addEventListener('click', nextQuestion);
+		// Función para reiniciar el quiz
+		function restartQuiz() {
+			currentQuestionIndex = 0; // Reiniciar índice de pregunta
+			score = 0; // Reiniciar puntaje
+			quizActive = true; // Marcar el quiz como activo
+			updateScoreDisplay(); // Actualizar visualización del puntaje
+			loadQuestion(); // Cargar la primera pregunta
+			startGlobalTimer(); // Iniciar el temporizador global
 
-		// Cargar la primera pregunta al iniciar la página
-		window.onload = loadQuestion;
+			// Ocultar la pantalla final al iniciar un nuevo quiz
+			endScreenElement.classList.add('hidden');
+			// Asegurarse de que el contenido del quiz esté visible
+			quizContentElement.classList.remove('hidden');
+			// Asegurarse de que el área de puntaje principal sea visible
+			scoreAreaElement.classList.remove('hidden');
+		}
+
+
+		// Este código se ejecutará una vez que toda la página HTML esté completamente cargada
+		window.onload = () => {
+			// Obtener referencias a los elementos del DOM
+			questionTextElement = document.getElementById('question-text');
+			optionsAreaElement = document.getElementById('options-area');
+			submitButton = document.getElementById('submit-answer');
+			nextButton = document.getElementById('next-question');
+			restartButton = document.getElementById('restart-quiz'); // Obtener referencia al botón de reiniciar
+			feedbackAreaElement = document.getElementById('feedback-area');
+			scoreAreaElement = document.getElementById('score-area');
+			timerAreaElement = document.getElementById('timer-area');
+			quizContentElement = document.getElementById('quiz-content');
+			endScreenElement = document.getElementById('end-screen');
+
+			// Event listeners para los botones - ¡Ahora dentro de window.onload!
+			submitButton.addEventListener('click', checkAnswer);
+			nextButton.addEventListener('click', nextQuestion);
+			restartButton.addEventListener('click', restartQuiz); // Event listener para el botón de reiniciar
+
+			// Iniciar el temporizador global y cargar la primera pregunta al iniciar la página
+			startGlobalTimer(); // Iniciar el temporizador global
+			loadQuestion(); // Cargar la primera pregunta
+		};
 
 	</script>
 
